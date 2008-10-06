@@ -1,5 +1,5 @@
 
-#include <stdafx.h>
+#include <guistdafx.h>
 ////////////////////////////////////////////////
 //
 // GUI_ANI 관련 클래스

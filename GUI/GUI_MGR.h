@@ -4,7 +4,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 #pragma once
-#include <stdafx.h>
+#include "guistdafx.h"
 
 
 // edit, pannel, button, list box( 판넬에 올라감)

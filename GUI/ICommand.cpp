@@ -1,5 +1,5 @@
 
-#include <stdafx.h>
+#include <guistdafx.h>
 #include "Icommand.h"
 
 #include "OBJMSG.h"

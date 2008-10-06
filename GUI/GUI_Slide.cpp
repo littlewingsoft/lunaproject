@@ -1,5 +1,5 @@
 
-#include <stdafx.h>
+#include <guistdafx.h>
 
 
 CGUI_Slide* CGUI_Slide::_pCurrentDownSlide = NULL;

@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 //#include "video_D3D9.h"
 //#include <IGui_Object.h>
-#include <stdafx.h>
+#include <guistdafx.h>
 #ifdef _HTMLLOG
 #include "HtmlLog.h"
 #endif
