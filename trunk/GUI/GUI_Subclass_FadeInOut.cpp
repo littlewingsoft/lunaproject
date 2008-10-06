@@ -6,7 +6,7 @@
 //#define GETB(rgb) ((BYTE)(rgb))
 
 //#include ".\gui_subclass_fadeinout.h"
-#include <stdafx.h>
+#include <guistdafx.h>
 
 DWORD  GUI_Subclass_FadeInOut::FUNCTEMPLATE::_BeginTime=0;
 
