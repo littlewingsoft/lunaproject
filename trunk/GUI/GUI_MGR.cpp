@@ -1,5 +1,6 @@
 
-#include <guistdafx.h>
+#include "guistdafx.h"
+#include "gui_mgr.h"
 
 
 IGUI_Object* CGUI_MGR::m_pLastFocus;

@@ -6,7 +6,8 @@
 #pragma once
 #include "guistdafx.h"
 
-
+struct GUIMSG;
+class IGUI_Object;
 // edit, pannel, button, list box( 판넬에 올라감)
 //----------------------------------------------------------------------
 // 위에 열거된 오브젝트들을 일괄 처리 하는 메니져 
