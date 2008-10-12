@@ -1,15 +1,25 @@
 
 #pragma once
-
-#include "enum_CLSID.h"
+//#include "enum_CLSID.h"
+//#include "resmgr.h"
 #pragma warning(disable: 4786) 
-#include <vector>
-using namespace std;
-#include "resmgr.h"
-#include "objmsg.h"
 
 
-enum GUICLSID 
+
+
+namespace gui
+{
+	class RESPOOL
+	{
+	public:
+		typedef int HANDLE;
+		HANDLE Load( const std::string name );
+	};
+
+class GUIMSG;
+class IGUI_Object;
+
+	enum GUICLSID 
 	{
 		IGUI=0,
 		GUI_PANNEL,		// 각종 버튼등이 올라감 그냥 드레그 기능만 있음 
@@ -39,7 +49,7 @@ enum GUICLSID
 #define REUSE      0x01
 #define VOLATILE   0x02
 
-//#define DECL_CREATE(xxx) 
+
 #define DECL_CREATE(xxx) static xxx* Create(){ return new xxx; }
 
 	class IGUI_Object
@@ -49,9 +59,7 @@ enum GUICLSID
 		IGUI_Object();
 		virtual ~IGUI_Object();
 
-
-
-		typedef vector<IGUI_Object* > GUI_PTRLIST;
+		typedef std::vector<IGUI_Object* > GUI_PTRLIST;
 		typedef GUI_PTRLIST::iterator GUI_LISTITOR;
 
 		void MoveGUI( float x, float y );
@@ -60,7 +68,8 @@ enum GUICLSID
 		virtual void Process(void ) = 0;
 		virtual void Render( void ) = 0;
 
-		RES_ANI	m_Img;
+		//RES_ANI	m_Img;
+		RESPOOL::HANDLE m_Handle;
 
 		void	SetX( float X );
 		void	SetY( float Y );
@@ -119,7 +128,7 @@ enum GUICLSID
 		GUICLSID m_Gui_ClsID;
 		GUI_PTRLIST	m_ChildList;
 		IGUI_Object* m_pParent; // m_pParent 가 NULL 이면 자신은 최상위 부모 
-//		IGUI_Object* m_pLastModal; // 마지막 모달값을 가지고 있는다..
+		//		IGUI_Object* m_pLastModal; // 마지막 모달값을 가지고 있는다..
 		bool		m_bModal;
 		DWORD		m_Clr;
 		BYTE		m_Layer;
@@ -129,3 +138,5 @@ enum GUICLSID
 
 
 
+
+}// end of GUI
