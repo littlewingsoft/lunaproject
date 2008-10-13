@@ -46,7 +46,7 @@ typedef basic_string<TCHAR> tstring;
 #define GETB(rgb) ((BYTE)(rgb))
 
 #define GETRGB(rgb) ((DWORD)(rgb<<8) )
-
+struct RES_ANI;
 struct UNION_ARGB
 {
 

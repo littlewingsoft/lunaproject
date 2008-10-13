@@ -1,6 +1,7 @@
 
 #pragma once
 
+
 #include "IGui_Object.h"
 
 ///////////////////////////////////////////////////////
@@ -16,7 +17,7 @@ public:
 
 //	static		DWORD TEXTCNT;
 	CGUI_Text();
-	CGUI_Text(int x,int y,DWORD		OutClr, DWORD		FontClr,const TCHAR* Str );
+	CGUI_Text(int x,int y,DWORD		OutClr, DWORD		FontClr,const std::string& Str );
 
 	virtual ~CGUI_Text();
 	void	SetFontClr(DWORD		 Clr);

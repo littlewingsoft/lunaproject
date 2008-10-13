@@ -1,7 +1,7 @@
 // ResMgr.cpp: implementation of the ResMgr class.
 //
 //////////////////////////////////////////////////////////////////////
-#include <stdafx.h>
+#include "stdafx.h"
 #include "baseobj.h"
 #include "resmgr.h"
 //#include "block.h"

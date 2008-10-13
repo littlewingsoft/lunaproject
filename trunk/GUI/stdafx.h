@@ -90,8 +90,7 @@
 #endif
 
 #pragma warning( disable : 4996 ) // disable deprecated warning 
-#include <tchar.h>
-#include <strsafe.h>
+//#include <strsafe.h>
 #pragma warning( default : 4996 ) 
 //
 //#include "DXUT.h"
@@ -102,9 +101,12 @@
 //#include "DXUTsettingsDlg.h"
 //#include "DXUTSound.h"
 //#include "DXUTRes.h"
-
+#include "video_d3d9.h"
 // STL
+#include <string>
 #include <vector>
+#include <list>
+#include <queue>
 
 #if defined(DEBUG) || defined(_DEBUG)
 #ifndef V
@@ -131,5 +133,21 @@
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
 #endif
+
+
+// ui Header
+#include "editbox.h"
+#include "enum_clsid.h"
+#include "gui_button.h"
+#include "gui_editbox.h"
+#include "gui_focustext.h"
+#include "Gui_listBox.h"
+#include "Gui_slide.h"
+#include "Gui_Text.h"
+#include "gui_pannel.h"
+#include "igui_object.h"
+#include "resmgr.h"
+#include "video_d3d9.h"
+
 
 #endif // !defined(DXSDK_STDAFX_H)
