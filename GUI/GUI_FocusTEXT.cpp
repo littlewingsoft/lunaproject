@@ -2,10 +2,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <stdafx.h>
+#include "stdafx.h"
 
 //	CGUI_Text(int x,int y,DWORD		FontClr,DWORD		OutClr,const TCHAR* Str );
-CGUI_FocusText::CGUI_FocusText(int x,int y,DWORD FontClr,DWORD 	OutClr,const TCHAR* Str ):
+CGUI_FocusText::CGUI_FocusText(int x,int y,DWORD FontClr,DWORD 	OutClr,const std::string& Str ):
 	CGUI_Text(x,y,FontClr,OutClr,Str)
 {
 

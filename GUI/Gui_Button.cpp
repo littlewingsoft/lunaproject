@@ -1,5 +1,7 @@
 
-#include <stdafx.h>
+#include "stdafx.h"
+#include "gui_mgr.h"
+#include "gui_button.h"
 
 ////////////////////////////////////////////////
 //
@@ -12,16 +14,16 @@
 CGUI_Button::CGUI_Button()
 { 
 	m_Clr= 0xffffffff;  m_LastState = m_State = NORMAL; 
-	m_pCommand = NULL; 
+//	m_pCommand = NULL; 
 	m_Gui_ClsID = GUI_BUTTON; 
 	m_FirstClick.x =0;	m_FirstClick.y =0;
 }
 CGUI_Button::~CGUI_Button()
 {
 	DestroyAllChild();
-	SAFE_DELETE( m_pCommand );
+//	SAFE_DELETE( m_pCommand );
 };
-
+/*
 void CGUI_Button::SetCommand(ICommand* pCommand )
 {
 	SAFE_DELETE( m_pCommand );
@@ -29,7 +31,7 @@ void CGUI_Button::SetCommand(ICommand* pCommand )
 	m_pCommand = pCommand; 
 	m_pCommand->SetParent( this ); 
 }
-
+*/
 bool CGUI_Button::IsEvent()
 {
 	if(m_LastState == DOWN && m_State == FOCUSON )
@@ -41,10 +43,10 @@ bool CGUI_Button::IsEvent()
 
 void	CGUI_Button::DoEvent() // 셋팅되어있는 이벤트를 발동해브러 
 {
-	if( m_pCommand != NULL )
-	{
-		m_pCommand->excute(); // 익스트라 커멘드 소켓을 끊기, 초대하기등의 익스트라 이벤트 커멘드들임 
-	}
+	//if( m_pCommand != NULL )
+	//{
+	//	m_pCommand->excute(); // 익스트라 커멘드 소켓을 끊기, 초대하기등의 익스트라 이벤트 커멘드들임 
+	//}
 
 	// 최고 부모를 찾아 그에게 메세지 이벤트 전송 
 	

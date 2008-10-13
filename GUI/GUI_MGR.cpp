@@ -1,7 +1,8 @@
 
-#include <stdafx.h>
-
-
+#include "stdafx.h"
+#include "igui_object.h"
+#include "gui_mgr.h"
+#include "GUI_FocusText.h"
 IGUI_Object* CGUI_MGR::m_pLastFocus;
 IGUI_Object* CGUI_MGR::m_pFocus;
 
@@ -35,9 +36,9 @@ void CGUI_MGR::AddGUI(IGUI_Object *pGui)
 	pGui->ProcMessage( msg );
 }
 
-CGUI_FocusText* CGUI_MGR::CreateFocusText(const TCHAR* szParentName, const TCHAR* MyName, int x,int y,DWORD OutClr,DWORD FontClr, const TCHAR* Str )
+CGUI_FocusText* CGUI_MGR::CreateFocusText(const string& szParentName, const string& MyName, int x,int y,DWORD OutClr,DWORD FontClr, const string& Str )
 {
-	if( _tcslen( Str ) == 0 )
+	if( Str.empty() )
 		return NULL ;
 
 	CGUI_FocusText* pTmp = new CGUI_FocusText( x, y, FontClr, OutClr, Str );
@@ -53,9 +54,9 @@ CGUI_FocusText* CGUI_MGR::CreateFocusText(const TCHAR* szParentName, const TCHAR
 	return 	pTmp;
 }
 
-CGUI_Text* CGUI_MGR::CreateText(const TCHAR* szParentName, const TCHAR* MyName, int x,int y,D3DCOLOR OutClr,D3DCOLOR FontClr, const TCHAR* Str )
+CGUI_Text* CGUI_MGR::CreateText(const string&  szParentName, const string& MyName, int x,int y,D3DCOLOR OutClr,D3DCOLOR FontClr, const string&  Str )
 {
-	if( _tcslen( Str ) == 0 )
+	if( Str.empty() )
 		return NULL ;
 
 	CGUI_Text* pTmp = new CGUI_Text( x, y, OutClr, FontClr,  Str );
@@ -594,7 +595,7 @@ void CGUI_MGR::ProcessAll()
 	while( _DestroyObjNameQ.empty() == false )
 	{
 		std::string& name = _DestroyObjNameQ.front();
-		DestroyObj( name.c_str() ); //(const TCHAR*)
+		DestroyObj( name ); //(const TCHAR*)
 		_DestroyObjNameQ.pop();
 	}
 }
@@ -719,7 +720,7 @@ void CGUI_MGR::ProcMessage(GUIMSG& Msg)
 	CGUI_MGR::_SendMessage(  Msg.dwMsg ,Msg.dwParam1,Msg.dwParam2);
 }
 
-IGUI_Object* CGUI_MGR::FindGui(const TCHAR* Name )
+IGUI_Object* CGUI_MGR::FindGui(const string& Name )
 { 
 	if( Name==NULL ) return NULL;
 	// 부모들을 모두 돌면서 그 부모의 자식또한 모두 돌아버린다.
@@ -753,7 +754,7 @@ void CGUI_MGR::DestroyObjQueue( const TCHAR* Name )  // 이름을 큐에 저장만 해놓�
 
 // 자기, 자기자신의 최고부모가 사라지면
 // 널포커스로 바꿔줘야함 
-void CGUI_MGR::DestroyObj( const TCHAR* Name )// 실제로 없애준다.
+void CGUI_MGR::DestroyObj( const string& Name )// 실제로 없애준다.
 {
 	// 자식을 먼저 검사한뒤 그 것을 없앤다. 
 	// 없앴다면 리턴 해버리고 

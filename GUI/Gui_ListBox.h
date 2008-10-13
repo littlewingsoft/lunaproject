@@ -1,9 +1,6 @@
 
 #pragma once
-#include "IGui_Object.h"
-#include "Gui_Ani.h"
-#include "Gui_Button.h"
-#include <string>
+
 ////////////////////////////////////////
 // 스크롤을 담당해주는 기본적으로 우측에 달리는 상,바,하 의 버튼역활
 class CGUI_ListBox;
@@ -36,12 +33,6 @@ public:
 // 실제 영역은 컨텐츠가 하나도 없을땐 0 
 // 계속 추가될때마다 + 컨텐츠 크기 
 // 추가된 컨텐츠 만큼 실제 사각형에 크기가 더 추가됨 
-
-#pragma warning(disable:4786) 
-#include <vector>
-using namespace std;
-
-//class CGUI_ListBox_SCROLL;
 
 class CGUI_ListBox : public IGUI_Object
 {

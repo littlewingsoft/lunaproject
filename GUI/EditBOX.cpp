@@ -1,10 +1,4 @@
-//#include <stdafx.h>
-//#include <windows.h>
-#include <tchar.h>
-
-#include "scene.h"
-#include "EditBox.h"
-
+#include "stdafx.h"
 
 WNDPROC		IWnd_Proc = NULL;
 COMPSTATE	g_CompState = CECW_ENDCOMP;

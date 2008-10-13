@@ -4,9 +4,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 #pragma once
-#include <stdafx.h>
 
-
+class CGUI_Text;
+class CGUI_FocusText;
+class ICommand;
 // edit, pannel, button, list box( 판넬에 올라감)
 //----------------------------------------------------------------------
 // 위에 열거된 오브젝트들을 일괄 처리 하는 메니져 
@@ -19,7 +20,7 @@ public:
 	virtual int GUIEvent_Hander( GUIMSG& Msg )=0;
 };
 
-#include <queue>
+
 class CGUI_MGR  
 {
 private:
@@ -27,8 +28,8 @@ private:
 	static IGUI_Object* m_pFocus;
 
 	static IGUI_Object::GUI_PTRLIST	 m_GuiList;
-	typedef list<TCHAR*> 	GUI_EDITLIST; 
-	static GUI_EDITLIST			m_EditList;
+	typedef std::list<TCHAR*> 	GUI_EDITLIST; 
+	static GUI_EDITLIST		m_EditList;
 
 	static std::queue<std::string> _DestroyObjNameQ;
 	
@@ -37,19 +38,19 @@ public:
 	~CGUI_MGR();
 	
 	static void	AddGUI( IGUI_Object* pGui );
-	static IGUI_Object* FindGui(const TCHAR* Name);
-	static void DestroyObj(const TCHAR* Name);
-	static void DestroyObjQueue(const TCHAR* Name);	
+	static IGUI_Object* FindGui(const string& Name);
+	static void DestroyObj(const string& Name);
+	static void DestroyObjQueue(const string& Name);	
 	static void DestroyAllObj( DWORD mode= VOLATILE );
     
 //	template<typename T> 적용가능하나 코딩의 압뷁~으로 인하여 다음에 쓰기로 함
 //	void CreateObj(T*& pTmp, const TCHAR* ClsName,const TCHAR* fName, int x,int y, int Width, int Height );
 
 	// 텍스트 만 생성합니다. 
-	static CGUI_Text* CreateText( const TCHAR* szParentName, const TCHAR* MyName, int x,int y,DWORD OutClr,DWORD FontClr, const TCHAR* Str );
+	static CGUI_Text* CreateText( const string& szParentName, const string& MyName, int x,int y,DWORD OutClr,DWORD FontClr, const TCHAR* Str );
 	// 아 졸라리 더티해 뭔가 해결방법을 찾아보세~ 
 	// 현재로선 이렇게 생성하는것 외에는 방법을 모르겟음 템플릿을 가지고 어찌어찌 해보면 될듯 
-	static CGUI_FocusText* CreateFocusText( const TCHAR* szParentName, const TCHAR* MyName, int x,int y,DWORD OutClr,DWORD FontClr, const TCHAR* Str );
+	static CGUI_FocusText* CreateFocusText( const string& szParentName, const string& MyName, int x,int y,DWORD OutClr,DWORD FontClr, const string& Str );
 
 	/*
 			GUI_TEXT,
@@ -59,7 +60,7 @@ public:
 			GUI_EDITBOX, 
 			GUI_LISTBOX,
 	*/
-	static void	ModalBox(TCHAR* szStr, ICommand* pCommand = NULL );
+	static void	ModalBox(string& szStr, ICommand* pCommand = NULL );
 	static void	ProcessAll(void);
 	static void	RenderAll(void);
 	static void	ProcMessage(GUIMSG& pMsg);

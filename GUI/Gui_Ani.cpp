@@ -1,5 +1,6 @@
 
-#include <stdafx.h>
+#include "stdafx.h"
+#include "gui_ani.h"
 ////////////////////////////////////////////////
 //
 // GUI_ANI 관련 클래스

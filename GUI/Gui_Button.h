@@ -2,14 +2,14 @@
 #pragma once
 #include "Igui_Object.h"
 
-class ICommand;
+//class ICommand;
 //기본적인 버튼 /////////////////////////////////////////////////////
 class CGUI_Button :public IGUI_Object
 {
 public:
 	enum STATE{ NORMAL=0,FOCUSON=1,DOWN=2,INACTIVE=3	};// 버튼의 상태는 모두 4가지 
 protected:
-	ICommand*	m_pCommand;
+//	ICommand*	m_pCommand;
 	STATE		m_State,m_LastState; 
 	POINT		m_FirstClick; // 버튼기준 좌표로 클릭된 위치를 기억함
 //	eOM			m_Event;
@@ -18,7 +18,7 @@ public:
 	CGUI_Button();
 	virtual ~CGUI_Button();
 	
-	void	SetCommand(ICommand* pCommand );
+//	void	SetCommand(ICommand* pCommand );
 //	void	_SetEvent(eOM Event ){ m_Event = Event;}
 //	eOM		_GetEvent(void)const {return m_Event;}
 	POINT   GetFirstClick()const {return m_FirstClick;}
