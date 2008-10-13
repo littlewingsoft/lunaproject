@@ -1,7 +1,7 @@
 
 //#include "Gui_Text.h"
 //#include "D3D.h"
-#include <guistdafx.h>
+#include <stdafx.h>
 
 ////////////////////////////////////////////////
 //

@@ -1,9 +1,8 @@
-
-#include "guistdafx.h"
+//#include <stdafx.h>
 //#include <windows.h>
+#include <tchar.h>
 
-
-//#include "scene.h"
+#include "scene.h"
 #include "EditBox.h"
 
 
@@ -70,7 +69,8 @@ SIZE GetStrPixel(HWND hWnd, HFONT hFont, const TCHAR* const Str ) // 스트링의 픽
 
 LRESULT CALLBACK InputProc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
 {
-//	if( CSCENE::GetCurrScene()->WinMSGProc( hWnd, Msg,wParam,lParam) == true )
+	
+	if( CSCENE::GetCurrScene()->WinMSGProc( hWnd, Msg,wParam,lParam) == true )
 	{
 		// 특정 신에서 특정 메세지를 처리 했다면 기본 메세지 처리기로 넘어감.
 		assert( IWnd_Proc!= NULL);
@@ -92,8 +92,7 @@ LRESULT CALLBACK InputProc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
 	
 	case WM_CREATE:
 		{
-			//TODO:: 작업꼭해야함.
-			//SendMessage( hWnd, WM_SETFONT,(WPARAM)g_D3D.GetGDIFont(),0);
+			SendMessage( hWnd, WM_SETFONT,(WPARAM)g_D3D.GetGDIFont(),0);
 		}
 		break;
 

@@ -1,10 +1,5 @@
 
-#include "guistdafx.h"
-#include "gui_ani.h"
-
-namespace gui
-{
-
+#include <stdafx.h>
 ////////////////////////////////////////////////
 //
 // GUI_ANI 관련 클래스
@@ -17,22 +12,21 @@ CGUI_Ani::CGUI_Ani()
 	m_CurrentFrame = 0;
 	m_bAni = false;
 }
-CGUI_Ani::CGUI_Ani(int x, int y, TCHAR* fName ):CGUI_Ani::CGUI_Ani()
+CGUI_Ani::CGUI_Ani(int x, int y, TCHAR* fName )
 {
-	//m_Gui_ClsID=GUI_ANI;
-	//g_D3D.LoadAni( fName, m_ImgHandle );
-	
-	if( m_ImgHandle.TexID == -1 )
+	m_Gui_ClsID=GUI_ANI;
+	g_D3D.LoadAni( fName, m_Img );
+	if( m_Img.TexID == -1 )
 	{
 #ifdef _HTMLLOG
 		g_HtmlLog.LogError( _T("%s 를 찾지 못했습니다."), fName );
 #endif 
-		assert( m_ImgHandle.TexID != -1 );
+		assert( m_Img.TexID != -1 );
 	}
 
-	SetBoundRect( x,y, x + m_ImgHandle.sprInfo.nWidth , y + m_ImgHandle.sprInfo.nHeight); //m_ImgHandle.sprInfo.nFrame * 
-	SetDestRect( x,y,x + m_ImgHandle.sprInfo.nWidth , y + m_ImgHandle.sprInfo.nHeight); //m_ImgHandle.sprInfo.nFrame * 
-	SetSrcRect(0,0,m_ImgHandle.sprInfo.nWidth, m_ImgHandle.sprInfo.nHeight);
+	SetBoundRect( x,y, x + m_Img.sprInfo.nWidth , y + m_Img.sprInfo.nHeight); //m_Img.sprInfo.nFrame * 
+	SetDestRect( x,y,x + m_Img.sprInfo.nWidth , y + m_Img.sprInfo.nHeight); //m_Img.sprInfo.nFrame * 
+	SetSrcRect(0,0,m_Img.sprInfo.nWidth, m_Img.sprInfo.nHeight);
 	m_LastTime = 0;	
 	m_bAni = false;
 	m_CurrentFrame = 0;
@@ -48,7 +42,7 @@ void CGUI_Ani::SetAni(bool bAni)
 void CGUI_Ani::SetFrame( int Frame )
 {
 	m_CurrentFrame = Frame; 
-	m_CurrentFrame %= m_ImgHandle.sprInfo.nFrame; 
+	m_CurrentFrame %= m_Img.sprInfo.nFrame; 
 }
 
 void CGUI_Ani::Process()
@@ -63,19 +57,19 @@ void CGUI_Ani::Render()
 
 	if( m_bAni )
 	{
-		if( timeGetTime() - m_LastTime > m_ImgHandle.sprInfo.mspf )
+		if( timeGetTime() - m_LastTime > m_Img.sprInfo.mspf )
 		{
 			m_LastTime = timeGetTime();
 			m_CurrentFrame++;
-			if( m_CurrentFrame >= m_ImgHandle.sprInfo.nFrame )
+			if( m_CurrentFrame >= m_Img.sprInfo.nFrame )
 			m_CurrentFrame = 0;
 		}
 	}
 
 	RECT srcRect=	{
-					(m_CurrentFrame * m_ImgHandle.sprInfo.nWidth)+m_SrcRect.left, 
+					(m_CurrentFrame * m_Img.sprInfo.nWidth)+m_SrcRect.left, 
 					m_SrcRect.top, 
-					(m_CurrentFrame * m_ImgHandle.sprInfo.nWidth)+m_SrcRect.right,//	(m_CurrentFrame * m_ImgHandle.sprInfo.nWidth)+m_ImgHandle.sprInfo.nWidth,
+					(m_CurrentFrame * m_Img.sprInfo.nWidth)+m_SrcRect.right,//	(m_CurrentFrame * m_Img.sprInfo.nWidth)+m_Img.sprInfo.nWidth,
 					m_SrcRect.bottom 
 					};
 	if( (srcRect.right - srcRect.left) != 0 )
@@ -83,7 +77,7 @@ void CGUI_Ani::Render()
 		if( (srcRect.bottom - srcRect.top) != 0 )
 		{
 			RECT tmp={m_DestRect.left,m_DestRect.top, m_DestRect.right,m_DestRect.bottom };
-			g_D3D.BltSprite( m_Layer, m_ImgHandle.TexID, &srcRect, tmp,m_Clr,D3D_ALPHASTATE );//D3D_NORMALSTATE
+			g_D3D.BltSprite( m_Layer, m_Img.TexID, &srcRect, tmp,m_Clr,D3D_ALPHASTATE );//D3D_NORMALSTATE
 		}
 		
 	}
@@ -97,7 +91,4 @@ bool CGUI_Ani::ProcMessage(GUIMSG& pMsg)
 	//	return true;
 
 	return false;
-}
-
-
 }

@@ -3,8 +3,6 @@
 
 #include "IGui_Object.h"
 
-namespace gui
-{
 ///////////////////////////////////////////////////////
 class CGUI_Ani : public IGUI_Object
 {
@@ -27,4 +25,3 @@ public:
 
 };
 
-}
