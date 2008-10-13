@@ -1,4 +1,4 @@
-#include "guistdafx.h"
+#include "StdAfx.h"
 #include ".\gui_avatar.h"
 
 CGUI_Avatar::CGUI_Avatar(void)

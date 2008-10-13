@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <guistdafx.h>
+#include <stdafx.h>
 
 //	CGUI_Text(int x,int y,DWORD		FontClr,DWORD		OutClr,const TCHAR* Str );
 CGUI_FocusText::CGUI_FocusText(int x,int y,DWORD FontClr,DWORD 	OutClr,const TCHAR* Str ):

@@ -1,5 +1,5 @@
 
-#include <guistdafx.h>
+#include <stdafx.h>
 #include "Share_Protocol\Network_Define.h"
 ////////////////////////////////////////////////
 //
