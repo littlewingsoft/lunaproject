@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uiViewer", "uiViewer\uiViewer_2005.vcproj", "{9C04CC2D-C188-4443-A185-CB0BCA6ED98D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui", "gui\gui.vcproj", "{A139F669-C933-42A3-AD11-3E6C0E807861}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -17,12 +15,6 @@ Global
 		{9C04CC2D-C188-4443-A185-CB0BCA6ED98D}.Profile|Win32.Build.0 = Profile|Win32
 		{9C04CC2D-C188-4443-A185-CB0BCA6ED98D}.Release|Win32.ActiveCfg = Release|Win32
 		{9C04CC2D-C188-4443-A185-CB0BCA6ED98D}.Release|Win32.Build.0 = Release|Win32
-		{A139F669-C933-42A3-AD11-3E6C0E807861}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A139F669-C933-42A3-AD11-3E6C0E807861}.Debug|Win32.Build.0 = Debug|Win32
-		{A139F669-C933-42A3-AD11-3E6C0E807861}.Profile|Win32.ActiveCfg = Release|Win32
-		{A139F669-C933-42A3-AD11-3E6C0E807861}.Profile|Win32.Build.0 = Release|Win32
-		{A139F669-C933-42A3-AD11-3E6C0E807861}.Release|Win32.ActiveCfg = Release|Win32
-		{A139F669-C933-42A3-AD11-3E6C0E807861}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
