@@ -1,14 +1,18 @@
 #pragma once
 
-class IDirect3DDevice9;
-
 class mainEntry
 {
+	IDirect3DDevice9* m_pkD3DDev;
+
+
 public:
 	mainEntry(void);
 	~mainEntry(void);
-	int LoadLua(const std::string& name);
+	int LoadLua(const std::wstring& LuaFileName);
 	void SetDevice( IDirect3DDevice9* pkD3DDev );
+	void Release();
 
-	int MainLoop();
+	void Render(float fElapsedTime);
+	void Process( float fElapsedTime );
+	int MainLoop(float fElapsedTime );
 };

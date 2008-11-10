@@ -39,6 +39,33 @@
 #endif
 #define WIN32_LEAN_AND_MEAN		// 거의 사용되지 않는 내용은 Windows 헤더에서 제외합니다.
 
+#if defined(DEBUG) || defined(_DEBUG)
+#ifndef V
+#define V(x)           { hr = x; if( FAILED(hr) ) { DXUTTrace( __FILE__, (DWORD)__LINE__, hr, L#x, true ); } }
+#endif
+#ifndef V_RETURN
+#define V_RETURN(x)    { hr = x; if( FAILED(hr) ) { return DXUTTrace( __FILE__, (DWORD)__LINE__, hr, L#x, true ); } }
+#endif
+#else
+#ifndef V
+#define V(x)           { hr = x; }
+#endif
+#ifndef V_RETURN
+#define V_RETURN(x)    { hr = x; if( FAILED(hr) ) { return hr; } }
+#endif
+#endif
+
+#ifndef SAFE_DELETE
+#define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
+#endif    
+#ifndef SAFE_DELETE_ARRAY
+#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);   (p)=NULL; } }
+#endif    
+#ifndef SAFE_RELEASE
+#define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
+#endif
+
+
 #include <windows.h>
 #include <assert.h>
 #include <wchar.h>
@@ -65,9 +92,13 @@
 #endif
 #endif
 
+// Direct3D includes
+#include <d3d9.h>
+#include <d3dx9.h>
+#include <dxerr9.h>
 
 // TODO: stl 관련헤더
-#include <string>
+//#include <string>
 #include <vector>
 #include <map>
 #include <list>
@@ -75,6 +106,8 @@
 
 
 #include "mainEntry.h"
+
+
 
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
 #endif
