@@ -120,6 +120,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="$(SolutionDir)\sdk\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -135,6 +136,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="sdk Make"
+				CommandLine="xcopy $(ProjectDir)\MainEntry.h c:\ /y /c"
 			/>
 		</Configuration>
 	</Configurations>
