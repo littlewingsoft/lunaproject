@@ -1,13 +1,9 @@
 #pragma once
 
-class mainEntry
+#include <string>
+
+namespace uiCore
 {
-	IDirect3DDevice9* m_pkD3DDev;
-
-
-public:
-	mainEntry(void);
-	~mainEntry(void);
 	int LoadLua(const std::wstring& LuaFileName);
 	void SetDevice( IDirect3DDevice9* pkD3DDev );
 	void Release();

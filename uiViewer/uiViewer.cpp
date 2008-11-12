@@ -8,6 +8,9 @@
 #include "dxstdafx.h"
 #include "resource.h"
 
+#include "uicore.h"
+
+
 
 //--------------------------------------------------------------------------------------
 // Rejects any devices that aren't acceptable by returning false
@@ -75,6 +78,8 @@ void CALLBACK OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float f
     // Render the scene
     if( SUCCEEDED( pd3dDevice->BeginScene() ) )
     {
+		uiCore::Render(fElapsedTime);
+
         V( pd3dDevice->EndScene() );
     }
 }
@@ -134,10 +139,15 @@ INT WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
     DXUTCreateWindow( L"uiViewer" );
     DXUTCreateDevice( D3DADAPTER_DEFAULT, true, 1024, 768, IsDeviceAcceptable, ModifyDeviceSettings );
 
+
+	uiCore::SetDevice( DXUTGetD3DDevice() );
+
     // Start the render loop
     DXUTMainLoop();
 
     // TODO: Perform any application-level cleanup here
+
+	uiCore::Release();
 
     return DXUTGetExitCode();
 }
