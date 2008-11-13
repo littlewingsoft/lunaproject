@@ -77,7 +77,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy mainEntry.h $(TargetDir) /y&#x0D;&#x0A;rename $(TargetDir)mainEntry.h uiCore.h"
+				CommandLine="xcopy mainEntry.h $(TargetDir) /y&#x0D;&#x0A;rename $(TargetDir)mainEntry.h uiCore.h&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -90,7 +90,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="del /q $(TargetDir)*.*"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -142,7 +142,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="sdk Make"
-				CommandLine="xcopy mainEntry.h $(TargetDir) /y&#x0D;&#x0A;rename $(TargetDir)mainEntry.h uiCore.h"
+				CommandLine="&#x0D;&#x0A;xcopy mainEntry.h $(TargetDir)  /y&#x0D;&#x0A;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -195,10 +195,6 @@
 		</File>
 		<File
 			RelativePath=".\uiCore.rc"
-			>
-		</File>
-		<File
-			RelativePath=".\watermark.bmp"
 			>
 		</File>
 	</Files>

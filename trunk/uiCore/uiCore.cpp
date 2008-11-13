@@ -20,10 +20,19 @@ void SetDevice( IDirect3DDevice9* pkDev )
 		MessageBox( 0, L"mainEntry::SetDevice::D3DXCreateSprite", L"error", MB_OK);
 		return;
 	}
+	wchar_t buff[256]={0,};
+	
+	_wgetcwd(buff,256);
 
-	HMODULE hmod = GetModuleHandle( L"uiCore_r.lib");
-//	D3DXCreateTextureFromResource( pkDev, hmod , MAKEINTRESOURCE(IDB_BITMAP1),&g_pkWaterMarkTexture);
-	D3DXCreateTextureFromFile( pkDev, L"watermark.bmp",&g_pkWaterMarkTexture);
+	HMODULE hmod = LoadLibrary( L"../sdk/uiRes.dll" );
+	if( hmod == NULL )
+	{
+		//불법사용으로 간주하고 무조건다운
+		//exit(-1);
+	}
+//	HMODULE hmod = GetModuleHandle( L"../sdk/uiRes.dll" );
+	D3DXCreateTextureFromResource( pkDev, hmod , MAKEINTRESOURCE(IDB_BITMAP1),&g_pkWaterMarkTexture);
+	BOOL bREt = FreeLibrary(hmod);
 	
 
 }
