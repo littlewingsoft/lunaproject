@@ -62,6 +62,8 @@ HRESULT CALLBACK OnResetDevice( IDirect3DDevice9* pd3dDevice,
 //--------------------------------------------------------------------------------------
 void CALLBACK OnFrameMove( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
 {
+	uiCore::Process(fElapsedTime);
+
 }
 
 
@@ -138,7 +140,6 @@ INT WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
     DXUTSetCursorSettings( true, true ); // Show the cursor and clip it when in full screen
     DXUTCreateWindow( L"uiViewer" );
     DXUTCreateDevice( D3DADAPTER_DEFAULT, true, 1024, 768, IsDeviceAcceptable, ModifyDeviceSettings );
-
 
 	uiCore::SetDevice( DXUTGetD3DDevice() );
 
