@@ -46,6 +46,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
+				OpenMP="false"
 				PrecompiledHeaderThrough="dxstdafx.h"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="true"
