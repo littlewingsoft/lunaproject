@@ -103,7 +103,13 @@
 #include <map>
 #include <list>
 
-
+extern "C" 
+{
+	#include "lua.h"
+	#include "lualib.h"
+	#include "lauxlib.h"
+};
+#include "lua_tinker.h"
 
 #include "uiCore.h"
 

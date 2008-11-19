@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="$(InputDir)lua51.lib"
 				OutputFile="$(SolutionDir)\sdk\$(ProjectName)_D.lib"
 			/>
 			<Tool
@@ -150,6 +151,30 @@
 	<References>
 	</References>
 	<Files>
+		<File
+			RelativePath=".\lauxlib.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lua_tinker.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\lua_tinker.h"
+			>
+		</File>
+		<File
+			RelativePath=".\luaconf.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lualib.h"
+			>
+		</File>
 		<File
 			RelativePath=".\luamgr.h"
 			>
