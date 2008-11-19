@@ -20,13 +20,11 @@ public:
 
 	void		glueFunction(const char* pszFunctionName, LuaFunctionType fpFunction);
 
-	double      GetNumberArgument(int nNum, double dDefault = 0.0f );
-	const char* GetStringArgument(int nNum, const char* pszDefault = NULL );
 	double		GetNumberGlobalValue(const char* pszValueName);
 	const char*	GetStringGlobalValue(const char* pszValueName);
 
-	void		PushString(const char* pszString);
-	void		PushNumber(double dValue);
+	void		SetString(const char* pszString);
+	void		SetNumber(double dValue);
 
 	double		OnLuaFunction(const char* pszFunctionName, int nNum, ...);
 

@@ -4,8 +4,9 @@
 
 namespace uiCore
 {
-	int LoadLua(const std::wstring& LuaFileName);
 	void SetDevice( IDirect3DDevice9* pkD3DDev );
+	
+	void ReleaseTextureAll();
 	void Release();
 
 	void Render(float fElapsedTime);
