@@ -263,7 +263,9 @@ void lua_tinker::print_error(lua_State *L, const char* fmt, ...)
 	}
 	else
 	{
-		printf("%s\n", text);
+		//printf("%s\n", text);
+		OutputDebugStringA( text );
+		OutputDebugStringA( "\n" );
 		lua_pop(L, 1);
 	}
 }

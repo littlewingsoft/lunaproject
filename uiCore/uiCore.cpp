@@ -15,7 +15,7 @@ using namespace std;
 namespace uiCore
 {
 
-namespace
+namespace localScope
 {
 	IDirect3DDevice9*	g_pkDev = 0;
 	IDirect3DTexture9*  g_pkWaterMarkTexture = 0; //
@@ -23,14 +23,72 @@ namespace
 	ID3DXFont*			g_pkFont =0 ;
 	lua_State*			g_luaState=0 ;
 	DWORD				g_dwKillTimer = 0;
+
+	struct text_t
+	{
+		int x,y;
+		DWORD clr;
+		wstring str;
+		
+	};
+
+	map<string, text_t > g_strTable;
 }
+using namespace localScope;
 
+// multibyte로 변경 
+//#include <stdio.h>
 
-void printOut_native(const char* str)
+inline void W2M( string& destMultibyteString, const wstring& srcUniString  )
 {
-	::OutputDebugString( L"18" );//str.c_str()
-	::OutputDebugString( L"\n" );
+	static char multiBuff[1024] ={0,}; 
+	// unicode로 변경 
+	WideCharToMultiByte( 932, 0,//WC_NO_BEST_FIT_CHARS | WC_COMPOSITECHECK | WC_DEFAULTCHAR
+						(LPCWSTR)srcUniString.c_str(), (int)srcUniString.length(), multiBuff, 1024, NULL, NULL); 
+
+	destMultibyteString = multiBuff;
 }
+
+
+	// unicode로 변경 
+inline wchar_t* M2W(  const string& srcMultiStr  )
+{
+	static wchar_t uniBuff[1024] ={0,}; 
+
+
+	int euckr_uniLen = MultiByteToWideChar(949, 0,	(LPCSTR)srcMultiStr.c_str(), (int)srcMultiStr.length(), uniBuff, sizeof(uniBuff)/sizeof(wchar_t));
+	uniBuff[euckr_uniLen] = 0;
+
+	//destUniStr = uniBuff;
+	return uniBuff;
+}
+
+void print( const char* str )
+{
+	OutputDebugStringA( str );
+	OutputDebugStringA( "\n" );
+}
+
+void printOut_native(const char* szDesc, int x, int y,DWORD clr, const char* str)
+{
+	text_t tt;
+	tt.str = M2W(str);
+	tt.x = x;
+	tt.y = y;
+	tt.clr = clr;
+	
+	g_strTable[szDesc] = tt ;
+}
+
+void control_clr( const char* desc, BYTE a, BYTE r, BYTE g, BYTE b )
+{
+	map<string,text_t>::iterator it = g_strTable.find( desc );
+	if( it != g_strTable.end() )
+	{
+		(*it).second.clr = D3DCOLOR_ARGB(a,r,g,b) ;
+	}
+}
+
 
 void InitLua()
 {
@@ -38,15 +96,20 @@ void InitLua()
 
 	// Lua 기본 함수들을 로드한다.- print() 사용
 	int ret = luaopen_base( g_luaState );
-
-	// sample1.lua 파일을 로드/실행한다.
-
+	luaopen_os(g_luaState );
+	luaopen_table(g_luaState );
+	luaopen_string(g_luaState );
+	luaopen_math(g_luaState );
 	// LuaTinker 를 이용해서 함수를 등록한다.
-	lua_tinker::def( g_luaState, "printOut_native", printOut_native );
+	lua_tinker::def( g_luaState, "luaprintOut_native", printOut_native );
+	lua_tinker::def( g_luaState, "control_clr", control_clr );
+	lua_tinker::def( g_luaState, "dbgprint", print );
+	
+	
+	lua_tinker::dofile( g_luaState, "../sdk/uiCore.lua");
+	
 
-	lua_tinker::dofile(g_luaState, "../sdk/uiCore.lua");
-
-	lua_tinker::call<void>( g_luaState, "printOut_native", "a1818" );
+	
 
 
 }
@@ -120,6 +183,24 @@ void ReleaseTextureAll()
 	g_texList.clear();
 }
 
+
+
+//#include <algorithm>
+void _drawText( const std::pair<string,text_t>& tt )
+{
+	RECT rt = {0, 0, 0,0};
+	V(g_pkFont->DrawText( g_pkSprite, tt.second.str.c_str(), (INT)tt.second.str.length(),&rt,DT_CALCRECT,0xFFFF0000) );
+	OffsetRect( &rt,tt.second.x,tt.second.y );
+	V( g_pkFont->DrawText( g_pkSprite, tt.second.str.c_str(), (INT)tt.second.str.length(),&rt,DT_LEFT,tt.second.clr ) ); //
+}
+
+
+void DrawTextAll()
+{
+	std::for_each( g_strTable.begin(), g_strTable.end(), _drawText );
+
+}
+
 void Render(float fElapsedTime)
 {
 	if( g_pkDev&& g_pkDev->TestCooperativeLevel() == S_OK )
@@ -130,6 +211,8 @@ void Render(float fElapsedTime)
 			{
 				if( g_pkWaterMarkTexture )
 				g_pkSprite->Draw( g_pkWaterMarkTexture, 0,0, &D3DXVECTOR3(1024-64,768-32,0),D3DCOLOR_ARGB(0xff,0xff,0xff,0xff));
+
+				DrawTextAll();
 				//if( g_dwKillTimer != 0 )
 				//{
 				//RECT rt= {0, 0, 1000, 100};
@@ -138,7 +221,6 @@ void Render(float fElapsedTime)
 				g_pkSprite->End();
 			}
 		}
-
 	}
 }
 
@@ -155,6 +237,11 @@ void CheckInvalidUsing()
 
 }
 
+void ProcessString()
+{
+//	lua_tinker::get<const char*>( g_luaState, "str");
+	
+}
 
 //lua로 시간, 마우스입력,키보드입력 이벤트 전달.
 //lua에서 넘겨져온 이벤트 콜벡 처리.
@@ -163,7 +250,8 @@ void CheckInvalidUsing()
 void Process( float fElapsedTime )
 {
 	CheckInvalidUsing();
-	
+	ProcessString();
+	lua_tinker::call<void>( g_luaState, "wakeCheck" );
 
 }
 
