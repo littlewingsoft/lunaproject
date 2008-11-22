@@ -37,7 +37,7 @@ void InitLua()
 	g_luaState = lua_open();
 
 	// Lua 기본 함수들을 로드한다.- print() 사용
-	luaopen_base(g_luaState);
+	int ret = luaopen_base( g_luaState );
 
 	// sample1.lua 파일을 로드/실행한다.
 

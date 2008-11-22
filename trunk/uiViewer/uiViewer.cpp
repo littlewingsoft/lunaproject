@@ -7,10 +7,7 @@
 //--------------------------------------------------------------------------------------
 #include "dxstdafx.h"
 #include "resource.h"
-
-#include "uicore.h"
-
-
+#include "../sdk/uicore.h"
 
 //--------------------------------------------------------------------------------------
 // Rejects any devices that aren't acceptable by returning false
@@ -62,8 +59,7 @@ HRESULT CALLBACK OnResetDevice( IDirect3DDevice9* pd3dDevice,
 //--------------------------------------------------------------------------------------
 void CALLBACK OnFrameMove( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
 {
-	uiCore::Process(fElapsedTime);
-
+	uiCore::Process( fElapsedTime );
 }
 
 
@@ -80,7 +76,7 @@ void CALLBACK OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float f
     // Render the scene
     if( SUCCEEDED( pd3dDevice->BeginScene() ) )
     {
-		uiCore::Render(fElapsedTime);
+		uiCore::Render( fElapsedTime );
 
         V( pd3dDevice->EndScene() );
     }
@@ -112,7 +108,7 @@ void CALLBACK OnDestroyDevice( void* pUserContext )
 {
 }
 
-
+#include "../sdk/uiCore.h"
 
 //--------------------------------------------------------------------------------------
 // Initialize everything and go into a render loop
@@ -139,7 +135,7 @@ INT WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
     DXUTInit( true, true, true ); // Parse the command line, handle the default hotkeys, and show msgboxes
     DXUTSetCursorSettings( true, true ); // Show the cursor and clip it when in full screen
     DXUTCreateWindow( L"uiViewer" );
-    DXUTCreateDevice( D3DADAPTER_DEFAULT, true, 1024, 768, IsDeviceAcceptable, ModifyDeviceSettings );
+    DXUTCreateDevice( D3DADAPTER_DEFAULT, true, 640, 480, IsDeviceAcceptable, ModifyDeviceSettings );
 
 	uiCore::SetDevice( DXUTGetD3DDevice() );
 
@@ -147,7 +143,6 @@ INT WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
     DXUTMainLoop();
 
     // TODO: Perform any application-level cleanup here
-
 	uiCore::Release();
 
     return DXUTGetExitCode();
