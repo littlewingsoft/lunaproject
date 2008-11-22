@@ -24,7 +24,7 @@
 #define _WIN32_WINNT   0x0500 
 #endif
 
-// #define DXUT_AUTOLIB to automatically include the libs needed for DXUT 
+ #define DXUT_AUTOLIB to automatically include the libs needed for DXUT 
 #ifdef DXUT_AUTOLIB
 #pragma comment( lib, "dxerr9.lib" )
 #pragma comment( lib, "dxguid.lib" )
