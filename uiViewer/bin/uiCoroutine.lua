@@ -7,10 +7,7 @@ function Sleep( tbl)
 end
 
 
-
 function makeThread( funk )
-
-
 	coHandle = coroutine.create( funk )
 	tbl={}
 	tbl.desc = "none"

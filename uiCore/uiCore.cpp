@@ -127,6 +127,7 @@ void InitLua()
 	luaopen_table(g_luaState );
 	luaopen_string(g_luaState );
 	luaopen_math(g_luaState );
+
 	// LuaTinker 를 이용해서 함수를 등록한다.
 	lua_tinker::def( g_luaState, "luaprintOut_native", printOut_native );
 	lua_tinker::def( g_luaState, "control_clr", control_clr );
@@ -135,11 +136,16 @@ void InitLua()
 	lua_tinker::def( g_luaState, "dbgprint", print );
 	lua_tinker::def( g_luaState, "GetMousePositionX", GetMousePositionX );
 	lua_tinker::def( g_luaState, "GetMousePositionY", GetMousePositionY );
-	lua_tinker::dofile( g_luaState, "uiCore.lua" );
+
+	RefreshLua();
 
 }
 	// sample1.lua 의 함수를 호출한다.
 	
+void RefreshLua()
+{
+	lua_tinker::dofile( g_luaState, "uiCore.lua" );
+}
 
 void UnInitLua()
 {
