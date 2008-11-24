@@ -92,6 +92,18 @@ void CALLBACK OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float f
 LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, 
                           bool* pbNoFurtherProcessing, void* pUserContext )
 {
+	switch( uMsg )
+	{
+	case WM_KEYDOWN:
+		{
+			if( wParam == VK_F5 )
+			{
+				uiCore::RefreshLua();
+			}
+		}
+		return 1;
+	}
+
     return 0;
 }
 

@@ -6,7 +6,9 @@ namespace uiCore
 {
 	void SetHWND( HWND hWnd );
 	void SetDevice( IDirect3DDevice9* pkD3DDev );
-	bool	LoadResource();
+	bool LoadResource();
+
+	void RefreshLua();
 
 	void ReleaseTextureAll();
 	void Release();
