@@ -20,8 +20,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory="c:\trash"
+			IntermediateDirectory="c:\trash"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="1"
@@ -68,12 +68,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/IGNORE:4089"
 				AdditionalDependencies=" dxguid.lib d3dx9d.lib d3d9.lib winmm.lib comctl32.lib $(SolutionDir)sdk/uicore_d.lib"
-				LinkIncremental="2"
+				OutputFile="bin\$(ProjectName).exe"
+				LinkIncremental="1"
 				GenerateManifest="false"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/uiViewer.pdb"
 				SubSystem="2"
 				TargetMachine="1"
+				AllowIsolation="false"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -103,8 +105,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
-			IntermediateDirectory="Release"
+			OutputDirectory="c:\trash"
+			IntermediateDirectory="c:\trash"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="1"
@@ -153,7 +155,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/IGNORE:4089"
-				AdditionalDependencies="dxerr.lib dxguid.lib d3dx9.lib d3d9.lib winmm.lib comctl32.lib"
+				AdditionalDependencies="dxguid.lib d3dx9.lib d3d9.lib winmm.lib comctl32.lib $(SolutionDir)sdk/uicore_r.lib"
 				OutputFile="$(OutDir)/uiViewer.exe"
 				LinkIncremental="1"
 				GenerateManifest="false"
@@ -191,8 +193,8 @@
 		</Configuration>
 		<Configuration
 			Name="Profile|Win32"
-			OutputDirectory="Profile"
-			IntermediateDirectory="Profile"
+			OutputDirectory="c:\trash"
+			IntermediateDirectory="c:\trash"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="1"
