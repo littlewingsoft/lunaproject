@@ -111,10 +111,10 @@
 #endif
 #else
 #ifndef V
-#define V(x)           { hr = x; }
+#define V(x)           { HRESULT hr = x; }
 #endif
 #ifndef V_RETURN
-#define V_RETURN(x)    { hr = x; if( FAILED(hr) ) { return hr; } }
+#define V_RETURN(x)    { HRESULT hr = x; if( FAILED(hr) ) { return hr; } }
 #endif
 #endif
 
