@@ -31,6 +31,8 @@ bool CALLBACK IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat,
 //--------------------------------------------------------------------------------------
 bool CALLBACK ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, const D3DCAPS9* pCaps, void* pUserContext )
 {
+	pDeviceSettings->pp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	
     return true;
 }
 
@@ -50,6 +52,7 @@ HRESULT CALLBACK OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_
 HRESULT CALLBACK OnResetDevice( IDirect3DDevice9* pd3dDevice, 
                                 const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
+	uiCore::OnResetDevice();
     return S_OK;
 }
 
@@ -98,6 +101,7 @@ LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
 //--------------------------------------------------------------------------------------
 void CALLBACK OnLostDevice( void* pUserContext )
 {
+	uiCore::OnLoseDevice();
 }
 
 
@@ -135,9 +139,14 @@ INT WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
     DXUTInit( true, true, true ); // Parse the command line, handle the default hotkeys, and show msgboxes
     DXUTSetCursorSettings( true, true ); // Show the cursor and clip it when in full screen
     DXUTCreateWindow( L"uiViewer" );
+	
     DXUTCreateDevice( D3DADAPTER_DEFAULT, true, 640, 480, IsDeviceAcceptable, ModifyDeviceSettings );
-
+	
+	
+	
+	uiCore::SetHWND( DXUTGetHWNDFocus() );
 	uiCore::SetDevice( DXUTGetD3DDevice() );
+	uiCore::LoadResource();
 
     // Start the render loop
     DXUTMainLoop();

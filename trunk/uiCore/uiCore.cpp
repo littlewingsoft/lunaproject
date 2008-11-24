@@ -17,6 +17,7 @@ namespace uiCore
 
 namespace localScope
 {
+	HWND				g_hWnd;
 	IDirect3DDevice9*	g_pkDev = 0;
 	IDirect3DTexture9*  g_pkWaterMarkTexture = 0; //
 	ID3DXSprite*        g_pkSprite = 0;          // Sprite used for drawing
@@ -88,7 +89,33 @@ void control_clr( const char* desc, BYTE a, BYTE r, BYTE g, BYTE b )
 		(*it).second.clr = D3DCOLOR_ARGB(a,r,g,b) ;
 	}
 }
+void control_textPos( const char* desc,int x, int y )
+{
+	map<string,text_t>::iterator it = g_strTable.find( desc );
+	if( it != g_strTable.end() )
+	{
+		(*it).second.x = x;
+		(*it).second.y = y;
+	}
 
+}
+
+int GetMousePositionX()
+{
+	POINT pt;
+	GetCursorPos( &pt );
+	ScreenToClient( g_hWnd, &pt );
+	return pt.x;
+}
+
+int GetMousePositionY()
+{
+	POINT pt;
+	GetCursorPos( &pt );
+	ScreenToClient( g_hWnd, &pt );
+	
+	return pt.y;
+}
 
 void InitLua()
 {
@@ -103,14 +130,12 @@ void InitLua()
 	// LuaTinker 를 이용해서 함수를 등록한다.
 	lua_tinker::def( g_luaState, "luaprintOut_native", printOut_native );
 	lua_tinker::def( g_luaState, "control_clr", control_clr );
+	lua_tinker::def( g_luaState, "control_textPos", control_textPos );
+	
 	lua_tinker::def( g_luaState, "dbgprint", print );
-	
-	
-	lua_tinker::dofile( g_luaState, "../sdk/uiCore.lua");
-	
-
-	
-
+	lua_tinker::def( g_luaState, "GetMousePositionX", GetMousePositionX );
+	lua_tinker::def( g_luaState, "GetMousePositionY", GetMousePositionY );
+	lua_tinker::dofile( g_luaState, "uiCore.lua" );
 
 }
 	// sample1.lua 의 함수를 호출한다.
@@ -123,26 +148,36 @@ void UnInitLua()
 	lua_close(g_luaState);
 }
 
+void SetHWND( HWND hWnd )
+{
+	g_hWnd = hWnd;
+}
 
 void SetDevice( IDirect3DDevice9* pkDev )
 {
 	assert( pkDev && "pkDev" );
-
 	g_pkDev = pkDev; 
-	HRESULT hr = D3DXCreateSprite( pkDev, &g_pkSprite);
+}
+
+bool LoadResource()
+{
+	assert( g_pkDev != NULL );
+
+	HRESULT hr = D3DXCreateSprite( g_pkDev, &g_pkSprite);
 	if( hr != D3D_OK )
 	{
 		MessageBox( 0, L"mainEntry::SetDevice::D3DXCreateSprite", L"error", MB_OK);
-		return;
+		return false;
 	}
 
-	D3DXCreateFont( pkDev, -12, 0, 0, 1, FALSE, DEFAULT_CHARSET, 
+	D3DXCreateFont( g_pkDev, -12, 0, 0, 1, FALSE, DEFAULT_CHARSET, 
                          OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, 
                          L"System", &g_pkFont );
 
-	HMODULE hmod = LoadLibrary( L"../sdk/uiRes.dll" );
+	HMODULE hmod = LoadLibrary( L"uiRes.dll" );
+	assert( hmod != NULL );
 
-	D3DXCreateTextureFromResource( pkDev, hmod , MAKEINTRESOURCE(IDB_BITMAP1),&g_pkWaterMarkTexture);
+	D3DXCreateTextureFromResource( g_pkDev, hmod , MAKEINTRESOURCE(IDB_BITMAP1),&g_pkWaterMarkTexture);
 
 	if( hmod == NULL || g_pkWaterMarkTexture == NULL )
 	{//timer발동.불법사용으로 간주하고 무조건다운
@@ -154,6 +189,7 @@ void SetDevice( IDirect3DDevice9* pkDev )
 	
 	InitLua();
 
+	return true;
 }
 
 std::map< std::wstring,IDirect3DTexture9* > g_texList;
@@ -201,6 +237,15 @@ void DrawTextAll()
 
 }
 
+void DrawWaterMark()
+{
+	D3DVIEWPORT9 view;
+	g_pkDev->GetViewport( &view );
+	
+	if( g_pkWaterMarkTexture )
+	g_pkSprite->Draw( g_pkWaterMarkTexture, 0,0, &D3DXVECTOR3(view.Width-64.0f,view.Height-32.0f,0),D3DCOLOR_ARGB(0xff,0xff,0xff,0xff));
+}
+
 void Render(float fElapsedTime)
 {
 	if( g_pkDev&& g_pkDev->TestCooperativeLevel() == S_OK )
@@ -209,19 +254,32 @@ void Render(float fElapsedTime)
 		{
 			if( g_pkSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE ) == S_OK )
 			{
-				if( g_pkWaterMarkTexture )
-				g_pkSprite->Draw( g_pkWaterMarkTexture, 0,0, &D3DXVECTOR3(1024-64,768-32,0),D3DCOLOR_ARGB(0xff,0xff,0xff,0xff));
+				DrawWaterMark();
+
 
 				DrawTextAll();
-				//if( g_dwKillTimer != 0 )
-				//{
-				//RECT rt= {0, 0, 1000, 100};
-				//g_pkFont->DrawText( g_pkSprite, L"bye bye~",-1,&rt,DT_LEFT,0xFFFF0000);
-				//}
+			
 				g_pkSprite->End();
 			}
 		}
 	}
+}
+
+void OnResetDevice()
+{
+	if( g_pkFont )
+	g_pkFont->OnResetDevice();
+	if( g_pkSprite )
+	g_pkSprite->OnResetDevice();
+}
+
+void OnLoseDevice()
+{
+	if( g_pkFont )
+	g_pkFont->OnLostDevice();
+
+	if( g_pkSprite )
+	g_pkSprite->OnLostDevice();
 }
 
 void CheckInvalidUsing()

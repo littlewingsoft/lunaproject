@@ -127,6 +127,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="$(InputDir)lua51.lib"
 				OutputFile="$(SolutionDir)\sdk\$(ProjectName)_R.lib"
 			/>
 			<Tool
