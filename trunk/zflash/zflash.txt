@@ -1,0 +1,103 @@
+=====================================================================
+                         ZFLASH library
+                            v.0.01
+                   by zZz/KCN (Anatoliy Samara)
+                          zzz@ukr.net
+                       http://kcn.org.ua
+=====================================================================
+
+What's up:
+----------
+
+ZFLASH is a library to render standard Macromedia Flash Player 
+component into a memory buffer, accessible by your application.
+It was not supposed to be an all-mighty library, but a library
+that simplifies just this action.
+
+Requirements:
+-------------
+- Visual C++ 6.0 with ATL libraries
+- Macromedia Flash Player ActiveX (either installed or 
+  swflash.ocx file)
+    
+Usage:
+------
+- Compile ZFLASH project to get a static link library. From your
+  application include zflash.h file and also tell linker to use
+  zflash.lib and oleaut32.lib.
+- Call Init
+- Call CreateBuffer
+- Call LoadMovie
+- In loop call DrawFrame
+- Call Exit
+
+The library is written in C++ and inteface functions are contained
+in a namespace ZFLASH. The functions are called like this:
+  ZFLASH::Init(0x60000);
+  ZFLASH::Exit();
+
+If you wish to use library with C, not C++, you should replace
+namespace declarations in library source code with extern "C" 
+declarations.
+
+Functions:
+----------
+
+int Init(int version_needed);
+
+  Inits the library and flash player. Checks if a flash player is
+  registered in the system and if it's version is at least like
+  version_needed. If it's not, it issues a message box and asks
+  if it should register the player. If user answers Yes it registers
+  swflash.ocx. For this reason, your swflash.ocx should be located
+  somewhere where your program could find it (see LoadLibrary in 
+  MSDN for file lookup starategy).
+
+  For today, the only interfaces, needed by the library, are in 
+  swflash.ocx component, so you can ship it with your program
+  for machines without flash player installed.
+
+  High word of version_needed is a major version, low word is a minor,
+  e.g. 0x60000 specifies version 6.0
+
+  Return value: NONZERO if SUCCESS, zero if failed
+
+void* CreateBuffer(int width,int height);
+  Creates a 32-bit XBGR buffer for flash player. width and height
+  specify size of buffer.
+
+  Return value: pointer to created buffer
+
+void LoadMovie(char *movie_name);
+  Loads an .swf movie into flash player and starts playing it. 
+  movie_name specifies file name.  If file name starts from '.' 
+  a current directory name is added at begining ao file name. 
+  This is because of strange flash player file search behaviour.
+
+
+int DrawFrame();
+  Draws current frame into a frame buffer. If current frame
+  in flash player was not changed since last call, nothing is
+  actually drawn and the function return 0 immediately.
+
+  Return value: nonzero if frame changed, zero if not.
+
+void Exit();
+  Deinits the library. Removes created buffer.
+
+
+Legal:
+------
+
+The library is free. You can distribute it anyhow including
+commercial usage without my permission. Of course, I am not
+responsible for anything connected with use or inability to use
+the library. It is also provided AS IS with no support available.
+
+You should also check licensing agreements for Macromedia Flash 
+Player and so on.
+
+This is your code, do anything you want. But I would be pleased
+if you decide to put my name into credits or greets ;) And of course 
+no support doesn't mean I cant answer some emails.
+
