@@ -180,18 +180,18 @@ bool LoadResource()
                          OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, 
                          L"System", &g_pkFont );
 
-	HMODULE hmod = LoadLibrary( L"uiRes.dll" );
-	assert( hmod != NULL );
+	//HMODULE hmod = LoadLibrary( L"uiRes.dll" );
+	//assert( hmod != NULL );
+	
+	//D3DXCreateTextureFromResource( g_pkDev, hmod , MAKEINTRESOURCE(IDB_BITMAP1),&g_pkWaterMarkTexture);
 
-	D3DXCreateTextureFromResource( g_pkDev, hmod , MAKEINTRESOURCE(IDB_BITMAP1),&g_pkWaterMarkTexture);
+	//if( hmod == NULL || g_pkWaterMarkTexture == NULL )
+	//{//timer발동.불법사용으로 간주하고 무조건다운
+	//	g_dwKillTimer = GetTickCount();
+	//	
+	//}
 
-	if( hmod == NULL || g_pkWaterMarkTexture == NULL )
-	{//timer발동.불법사용으로 간주하고 무조건다운
-		g_dwKillTimer = GetTickCount();
-		
-	}
-
-	BOOL bREt = FreeLibrary(hmod);
+	//BOOL bREt = FreeLibrary(hmod);
 	
 	InitLua();
 
