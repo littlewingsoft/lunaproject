@@ -290,15 +290,15 @@
 			>
 		</File>
 		<File
-			RelativePath=".\uiCore.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\uiCore.h"
-			>
-		</File>
-		<File
 			RelativePath=".\uiCore.rc"
+			>
+		</File>
+		<File
+			RelativePath=".\uiCore_2008.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\uiCore_2008.h"
 			>
 		</File>
 	</Files>
