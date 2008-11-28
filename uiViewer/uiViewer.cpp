@@ -8,6 +8,8 @@
 #include "dxstdafx.h"
 #include "resource.h"
 #include "../sdk/uicore.h"
+#include "gswf.h"
+
 
 //--------------------------------------------------------------------------------------
 // Rejects any devices that aren't acceptable by returning false
@@ -80,7 +82,6 @@ void CALLBACK OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float f
     if( SUCCEEDED( pd3dDevice->BeginScene() ) )
     {
 		uiCore::Render( fElapsedTime );
-
         V( pd3dDevice->EndScene() );
     }
 }
@@ -125,6 +126,7 @@ void CALLBACK OnDestroyDevice( void* pUserContext )
 }
 
 #include "../sdk/uiCore.h"
+#include "gswf.h"
 
 //--------------------------------------------------------------------------------------
 // Initialize everything and go into a render loop
@@ -154,14 +156,14 @@ INT WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 	
     DXUTCreateDevice( D3DADAPTER_DEFAULT, true, 640, 480, IsDeviceAcceptable, ModifyDeviceSettings );
 	
-	
-	
 	uiCore::SetHWND( DXUTGetHWNDFocus() );
 	uiCore::SetDevice( DXUTGetD3DDevice() );
 	uiCore::LoadResource();
 
     // Start the render loop
     DXUTMainLoop();
+
+
 
     // TODO: Perform any application-level cleanup here
 	uiCore::Release();
