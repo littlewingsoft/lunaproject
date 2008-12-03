@@ -38,7 +38,7 @@
 #include <XInput.h> // Header for XInput APIs
 
 // CRT's memory leak detection
-#if defined(DEBUG) || defined(_DEBUG)
+#if defined(DEBUG) | defined(_DEBUG)
 #include <crtdbg.h>
 #endif
 
@@ -55,11 +55,11 @@
 
 extern "C" 
 {
-	#include "lua.h"
-	#include "lualib.h"
-	#include "lauxlib.h"
+	#include "lua/lua.h"
+	#include "lua/lualib.h"
+	#include "lua/lauxlib.h"
 };
-#include "lua_tinker.h"
+#include "lua/lua_tinker.h"
 
 #include "uiCore.h"
 
