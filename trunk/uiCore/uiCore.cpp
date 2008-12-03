@@ -1,14 +1,6 @@
 #include "StdAfx.h"
 #include "resource.h"
 
-extern "C" 
-{
-	#include "lua.h"
-	#include "lualib.h"
-	#include "lauxlib.h"
-};
-
-#include "lua_tinker.h"
 
 using namespace std;
 
@@ -28,8 +20,9 @@ namespace localScope
 	struct text_t
 	{
 		int x,y;
+		RECT rt;
 		DWORD clr;
-		wstring str;
+		wstring Text;
 		
 	};
 
@@ -70,15 +63,23 @@ void print( const char* str )
 	OutputDebugStringA( "\n" );
 }
 
-void printOut_native(const char* szDesc, int x, int y,DWORD clr, const char* str)
+void printOut_native( lua_tinker::table tb)
 {
-	text_t tt;
-	tt.str = M2W(str);
-	tt.x = x;
-	tt.y = y;
-	tt.clr = clr;
 	
-	g_strTable[szDesc] = tt ;
+	const char* szName = tb.get<const char*>("name");
+	const char* szText= tb.get<const char*>("Text");
+	
+	//const char* szDesc, int x, int y,BYTE alpha, DWORD clr, const char* str
+	text_t tt;
+	tt.Text = M2W(szText);
+	tt.x = tb.get<int>("x");
+	tt.y = tb.get<int>("y");
+	tt.clr = tb.get<DWORD>("clr");
+	
+	RECT rt = {0, 0, 0,0};
+	V(g_pkFont->DrawText( g_pkSprite, tt.Text.c_str(), (INT)tt.Text.length(),&rt,DT_CALCRECT,0xFFFF0000) );
+	tt.rt = rt;
+	g_strTable[ szName ] = tt ;
 }
 
 void control_clr( const char* desc, BYTE a, BYTE r, BYTE g, BYTE b )
@@ -138,7 +139,6 @@ void InitLua()
 	lua_tinker::def( g_luaState, "GetMousePositionY", GetMousePositionY );
 
 	RefreshLua();
-
 }
 	// sample1.lua 의 함수를 호출한다.
 	
@@ -178,7 +178,7 @@ bool LoadResource()
 
 	D3DXCreateFont( g_pkDev, -12, 0, 0, 1, FALSE, DEFAULT_CHARSET, 
                          OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, 
-                         L"System", &g_pkFont );
+                         L"Arial", &g_pkFont );
 
 	//HMODULE hmod = LoadLibrary( L"uiRes.dll" );
 	//assert( hmod != NULL );
@@ -225,22 +225,19 @@ void ReleaseTextureAll()
 	g_texList.clear();
 }
 
-
-
-//#include <algorithm>
 void _drawText( const std::pair<string,text_t>& tt )
 {
-	RECT rt = {0, 0, 0,0};
-	V(g_pkFont->DrawText( g_pkSprite, tt.second.str.c_str(), (INT)tt.second.str.length(),&rt,DT_CALCRECT,0xFFFF0000) );
-	OffsetRect( &rt,tt.second.x,tt.second.y );
-	V( g_pkFont->DrawText( g_pkSprite, tt.second.str.c_str(), (INT)tt.second.str.length(),&rt,DT_LEFT,tt.second.clr ) ); //
+	const text_t& tmpT  = tt.second;
+	static RECT rt;
+	rt = tmpT.rt;
+	OffsetRect( &rt, tmpT.x,tmpT.y );
+	V( g_pkFont->DrawTextW( g_pkSprite,tmpT.Text.c_str(), (INT)tmpT.Text.length(),&rt,DT_LEFT,tmpT.clr ) ); //
 }
 
 
 void DrawTextAll()
 {
 	std::for_each( g_strTable.begin(), g_strTable.end(), _drawText );
-
 }
 
 void DrawWaterMark()
@@ -303,8 +300,7 @@ void CheckInvalidUsing()
 
 void ProcessString()
 {
-//	lua_tinker::get<const char*>( g_luaState, "str");
-	
+
 }
 
 //lua로 시간, 마우스입력,키보드입력 이벤트 전달.

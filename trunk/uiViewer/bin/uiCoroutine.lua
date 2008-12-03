@@ -12,8 +12,6 @@ function makeThread( funk )
 	tbl={}
 	tbl.desc = "none"
 	tbl.timeStamp = os.clock()
-	tbl.x = 0
-	tbl.y = 0
 	tbl.delay = 0.3
 	tbl.coHandle = coHandle
 	table.insert( coTable, tbl )

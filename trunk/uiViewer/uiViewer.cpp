@@ -8,7 +8,6 @@
 #include "dxstdafx.h"
 #include "resource.h"
 #include "../sdk/uicore.h"
-#include "gswf.h"
 
 
 //--------------------------------------------------------------------------------------
@@ -126,7 +125,7 @@ void CALLBACK OnDestroyDevice( void* pUserContext )
 }
 
 #include "../sdk/uiCore.h"
-#include "gswf.h"
+
 
 //--------------------------------------------------------------------------------------
 // Initialize everything and go into a render loop
