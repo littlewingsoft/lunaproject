@@ -257,6 +257,13 @@ HRESULT CD3DEnumeration::EnumerateDevices( CD3DEnumAdapterInfo* pAdapterInfo, CG
                 delete pDeviceInfo;
                 continue;
             }
+
+			else if( hr == D3DERR_INVALIDCALL )
+			{
+		        hr = m_pD3D->CreateDevice( pAdapterInfo->AdapterOrdinal, pDeviceInfo->DeviceType, DXUTGetHWNDFocus(),
+                                          D3DCREATE_SOFTWARE_VERTEXPROCESSING, &pp, &pDevice );
+			}
+
         }
         SAFE_RELEASE( pDevice );
 

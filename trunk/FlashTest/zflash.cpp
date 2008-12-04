@@ -18,10 +18,17 @@ void __Error(wchar_t *message,const char *file=__FILE__,int line=__LINE__)
 	OutputDebugString( ss.str().c_str() );
 }
 
-IShockwaveFlash *iflash=NULL;
-IUnknown *unk=NULL;
+
+
 CAxWindow cw;
+IUnknown *unk=NULL;
+IShockwaveFlash *iflash=NULL;
 IViewObjectEx *viewobject;
+IOleInPlaceObjectWindowless* mWndlessObject=0;
+IOleClientSite*					pkIOleClientSite=0;
+IOleInPlaceSiteWindowless*		pkIOleInPlaceSiteWindowless=0;
+IOleInPlaceFrame*				pkIOleInPlaceFrame=0;
+IStorage*						pkIStorage=0;
 
 int bm_width=0,bm_height=0;
 HDC hdcCompatible = NULL;
@@ -53,13 +60,32 @@ namespace ZFLASH{
 		g_bLoop = bLoop;
 	}
 
-int Init(int version_needed){
+int Init(int version_needed)
+{
 	int player_ok=1;
+
 	IShockwaveFlash *try_flash;
 	OleInitialize(NULL);
 	CoCreateInstance(CLSID_ShockwaveFlash,NULL,CLSCTX_INPROC_SERVER,IID_IShockwaveFlash,(void **)&try_flash);
 	if (!try_flash){
 		player_ok=0;
+		wchar_t temp[1024];
+		wsprintf( temp, L"Flash Player v%d.%02d is not registered on this system!\nFlash Player is required to run this programm.\n\nRegister it now?",version_needed>>16,version_needed&0xffff);
+		int res=MessageBox(NULL,temp,L"Requirements",MB_ICONQUESTION|MB_YESNO);
+		if (res==IDYES)
+		{
+			HMODULE hlib=LoadLibraryW( L"swflash.ocx");
+			if (!hlib)
+				__Error( L"File swflash.ocx not found");
+
+			void (__stdcall *DllRegisterServer)(void);
+			DllRegisterServer=(void (__stdcall *)(void))GetProcAddress(hlib,"DllRegisterServer");
+			DllRegisterServer();
+		}
+		else
+		{
+			return 0;
+		}
 	}
 	else{
 		long version;
@@ -69,22 +95,20 @@ int Init(int version_needed){
 		try_flash->Release();
 	}
 
-	if (!player_ok){
-		wchar_t temp[1024];
-		wsprintf( temp, L"Flash Player v%d.%02d is not registered on this system!\nFlash Player is required to run this programm.\n\nRegister it now?",version_needed>>16,version_needed&0xffff);
-		int res=MessageBox(NULL,temp,L"Requirements",MB_ICONQUESTION|MB_YESNO);
-		if (res==IDYES){
-			HMODULE hlib=LoadLibraryW( L"swflash.ocx");
-			if (!hlib)
-				__Error( L"File swflash.ocx not found");
-			void (__stdcall *DllRegisterServer)(void);
-			DllRegisterServer=(void (__stdcall *)(void))GetProcAddress(hlib,"DllRegisterServer");
-			DllRegisterServer();
-		}
-		else{
-			return 0;
-		}
+	if (!player_ok)
+	{
+
 	}
+	return 1;
+}
+
+int msgProc( unsigned int msg, unsigned int wParam, unsigned long lParam  )
+{
+	LRESULT lr;
+	//IOleClientSite, IOleInPlaceSiteWindowless, IOleInPlaceFrame, IStorage
+	if( mWndlessObject )
+	mWndlessObject->OnWindowMessage( msg, wParam, lParam, &lr );
+
 	return 1;
 }
 
@@ -174,7 +198,13 @@ DWORD* LoadMovie(const std::wstring& movie_name, int w,int h )
 	HRESULT hr = unk->QueryInterface( IID_IShockwaveFlash, (void **)&iflash );
 	if (!iflash) __Error( L"Unable to query IFlash");
 
-	BSTR url = (BSTR)"bstr";
+	hr = iflash->QueryInterface(__uuidof(IOleInPlaceObjectWindowless), (void**)&mWndlessObject);
+
+	//pkIOleClientSite
+	//pkIOleInPlaceSiteWindowless->
+	//pkIOleInPlaceFrame
+	//pkIStorage;
+
 
 	LPWSTR buf =(LPWSTR) malloc( sizeof(WCHAR)*256 );
 	if (movie_name[0]=='.')
@@ -188,10 +218,6 @@ DWORD* LoadMovie(const std::wstring& movie_name, int w,int h )
 		}
 		wcsncat_s( buf,256, movie_name.c_str(), movie_name.length()   );
 	}
-	else if( movie_name.find( L"http://" ) != -1 )
-	{
-		wcscpy_s( buf,256,movie_name.c_str() );
-	}
 	else
 	{
 		//strcpy( buf, movie_name );
@@ -199,6 +225,7 @@ DWORD* LoadMovie(const std::wstring& movie_name, int w,int h )
 
 	}
 
+	std::wstring ttt = buf;
 
 	//LPWSTR real_name =(LPWSTR) malloc( sizeof(WCHAR)*256);//unsigned short
 	//MultiByteToWideChar( CP_ACP,0, buf, -1, real_name,256);

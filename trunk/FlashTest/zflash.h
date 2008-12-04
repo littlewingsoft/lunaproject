@@ -17,5 +17,6 @@ bool Loop();
 int GetWidth();
 int GetHeight();
 
+int msgProc( unsigned int msg, unsigned int wParam, unsigned long lParam  );
 
 }//namespace
