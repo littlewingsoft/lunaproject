@@ -10,7 +10,7 @@ namespace uiCore
 
 	void RefreshLua();
 
-	void ReleaseTextureAll();
+	void ShutDown_ReleaseTextureAll(bool bClearTable);
 	void Release();
 
 	void OnResetDevice();

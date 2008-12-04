@@ -1,4 +1,7 @@
+
+#include "common/dxstdafx.h"
 #include "flashContainer.h"
+
 
 FlashContainer::FlashContainer(IDirect3DDevice9 * m_pDevice,char * Path,int Width,int Height)
 {	

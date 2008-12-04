@@ -78,6 +78,8 @@
 #include <mmreg.h>
 #include <dsound.h>
 
+#include <tchar.h>
+
 // strsafe.h deprecates old unsecure string functions.  If you 
 // really do not want to it to (not recommended), then uncomment the next line 
 //#define STRSAFE_NO_DEPRECATE

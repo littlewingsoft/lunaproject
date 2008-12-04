@@ -107,7 +107,7 @@ HRESULT CALLBACK OnResetDevice( IDirect3DDevice9* pd3dDevice,
 
 	pd3dDevice->EvictManagedResources();
 
-	pkBuffer  = ZFLASH::LoadMovie( L"./test.swf", pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
+	pkBuffer  = ZFLASH::LoadMovie( L"./-test.swf", pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
 	
 //    wchar_t* url = L"http://pann.nate.com/images/movieUpload/PannPlayer.swf?mov_id=3578117_1486157&vs_id=pann&vs_keys=3578117_1486157&autoPlay=0&externalPlayer=1&scrap=1" ;
 //	pkBuffer  = ZFLASH::LoadMovie( url, pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
@@ -215,7 +215,7 @@ LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
                           bool* pbNoFurtherProcessing, void* pUserContext )
 {
 	//MsgProcGSWF( uMsg, wParam, lParam );
-
+	//ZFLASH::msgProc( uMsg, wParam,lParam );
     return 0;
 }
 
@@ -289,7 +289,7 @@ INT WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 		} 
 	}
 
-    DXUTCreateDevice( AdapterToUse, false, FLASH_W, FLASH_H, IsDeviceAcceptable, ModifyDeviceSettings );
+    DXUTCreateDevice( AdapterToUse, true, FLASH_W, FLASH_H, IsDeviceAcceptable, ModifyDeviceSettings );
 	
     // Start the render loop
     DXUTMainLoop();

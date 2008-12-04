@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uiCore", "uiCore\uiCore_2008.vcproj", "{36D61EFD-E004-4275-9551-EA8B1178300E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uiViewer", "uiViewer\uiViewer_2008.vcproj", "{D3D09108-96D0-4629-88B8-122C0256058C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{36D61EFD-E004-4275-9551-EA8B1178300E} = {36D61EFD-E004-4275-9551-EA8B1178300E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
