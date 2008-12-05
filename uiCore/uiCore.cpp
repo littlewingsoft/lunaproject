@@ -145,13 +145,14 @@ void SetDevice( IDirect3DDevice9* pkDev )
 void native_ImgLoad( const char* szKeyName, const char* szFullPathName  )
 {
 
-	map<string,img_t>::iterator it = gimgTable.find( szKeyName );
-	if( it != gimgTable.end() )
-	{
-		assert( (*it).second.pkTexture );
-		SAFE_RELEASE( (*it).second.pkTexture );
-		gimgTable.erase( it );
-	}
+	//map<string,img_t>::iterator it = gimgTable.find( szKeyName );
+	//if( it != gimgTable.end() )
+	//{
+	//	//assert( (*it).second.pkTexture );
+	//	IDirect3DTexture9* pkTex = (*it).second.pkTexture;
+	//	SAFE_RELEASE( pkTex );
+	//	gimgTable.erase( it );
+	//}
 
 
 	wstring wFullPathName = M2W( szFullPathName );
@@ -205,8 +206,8 @@ void ShutDown_ReleaseTextureAll(bool bClearTable)
 	while( it != gimgTable.end() )
 	{
 		img_t& tt = (*it).second;
-		IDirect3DTexture9* pkTex = tt.pkTexture;
-		SAFE_RELEASE( pkTex );
+		//IDirect3DTexture9* pkTex = tt.pkTexture;
+		SAFE_RELEASE( tt.pkTexture );
 		it++;
 	}
 
