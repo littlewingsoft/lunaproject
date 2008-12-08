@@ -11,17 +11,13 @@ end
 
 
 function loop( hCtrl )
-
-dbgprint( string.format("tablCnt:%d",table.maxn(hCtrl.controllerTable) ) )
+	dbgprint( string.format("tablCnt:%d",table.maxn(hCtrl.controllerTable) ) )
 	while true do
 
 		for i, v in ipairs(hCtrl.controllerTable) do
 			--Sleep( hCtrl ) -- 정해진 시간만큼 대기함
 			v.Process( hCtrl,v , i )
 		end
-
-
-
 	end
 end
 
@@ -148,11 +144,6 @@ end
 				end
 	}
 
-
-
---native_ImgLoad( "name", "a.dds" )
-MakeControl( "textFollow",{	ctrl_TextOut ,	ctrl_TextAlpha,	ctrl_FollowMouse} )
-MakeControl( "button", {	ctrlr_ImgLoading,ctrlr_CheckMouseOver  }  ) --ctrlr_ImgFollow
 
 --[[
 ctrlImgAdd = {}
