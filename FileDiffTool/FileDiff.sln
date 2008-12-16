@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "checkSumMake", "checkSumMake\checkSumMake.vcproj", "{8917AF02-7142-4AD7-A2B2-A6BCFE2EF2F2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Diff", "Diff\Diff.vcproj", "{A5786000-724C-48FB-BB57-B0DE223889F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8917AF02-7142-4AD7-A2B2-A6BCFE2EF2F2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8917AF02-7142-4AD7-A2B2-A6BCFE2EF2F2}.Debug|Win32.Build.0 = Debug|Win32
+		{8917AF02-7142-4AD7-A2B2-A6BCFE2EF2F2}.Release|Win32.ActiveCfg = Release|Win32
+		{8917AF02-7142-4AD7-A2B2-A6BCFE2EF2F2}.Release|Win32.Build.0 = Release|Win32
+		{A5786000-724C-48FB-BB57-B0DE223889F7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A5786000-724C-48FB-BB57-B0DE223889F7}.Debug|Win32.Build.0 = Debug|Win32
+		{A5786000-724C-48FB-BB57-B0DE223889F7}.Release|Win32.ActiveCfg = Release|Win32
+		{A5786000-724C-48FB-BB57-B0DE223889F7}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
