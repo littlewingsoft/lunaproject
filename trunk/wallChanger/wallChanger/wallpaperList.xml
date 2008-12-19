@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ks_c_5601-1987" ?>
+
+<ROOT count="4" version="20020620">
+  <동물>
+    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/새.jpg" w="800" h="600" />
+    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/토끼.bmp" w="512" h="384" />
+    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/강아지.jpg" w="1024" h="768" />
+    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/고양이.bmp" w="1600" h="1200" />
+  </동물>
+
+  <연>
+    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/비.jpg" w="800" h="600" />
+    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/서태지.bmp" w="512" h="384" />
+    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/신승훈.jpg" w="1024" h="768" />
+    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/강호동.bmp" w="1600" h="1200" />
+  </연>
+
+</ROOT>
+
+
+
+<FRIEND>
+  <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/비.jpg" w="800" h="600" />
+  <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/서태지.bmp" w="512" h="384" />
+  <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/신승훈.jpg" w="1024" h="768" />
+</FRIEND>
+
