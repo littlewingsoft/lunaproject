@@ -42,3 +42,5 @@ public:
 	CXTabCtrl m_Tab;
 	afx_msg void OnDestroy();
 };
+
+extern CwallChangerDlg* g_pkMainDlg;
