@@ -38,9 +38,8 @@
 #include "tinyxml/tinyXml.h"
 #include "xtabCtrl.h"
 
-
-
-
+#include "wallChanger.h"
+#include "wallChangerDlg.h"
 
 #ifdef _UNICODE
 #if defined _M_IX86

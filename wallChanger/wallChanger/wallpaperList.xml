@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="ks_c_5601-1987" ?>
 
 <ROOT count="4" version="20020620">
-  <동물>
-    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/새.jpg" w="800" h="600" />
-    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/토끼.bmp" w="512" h="384" />
-    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/강아지.jpg" w="1024" h="768" />
-    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/고양이.bmp" w="1600" h="1200" />
-  </동물>
-
-  <연>
-    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/비.jpg" w="800" h="600" />
-    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/서태지.bmp" w="512" h="384" />
-    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/신승훈.jpg" w="1024" h="768" />
-    <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/강호동.bmp" w="1600" h="1200" />
-  </연>
+  <여자들>
+    <IMG URL="http://cfile290.uf.daum.net/image/14080D06494D19410CFE72" w="800" h="600" />
+    <IMG URL="http://cfile290.uf.daum.net/image/11080D06494D19420D5787" w="512" h="384" />
+    <IMG URL="http://cfile290.uf.daum.net/image/12080D06494D19420E0D75" w="1024" h="768" />
+    <IMG URL="http://cfile290.uf.daum.net/image/12080D06494D194611B8AF" w="1600" h="1200" />
+    <IMG URL="http://cfile290.uf.daum.net/image/15080D06494D1947136846" w="1600" h="1200" />
+  </여자들>
 
 </ROOT>
 
 
+<SHARE>
+   <IMG URL="http://cfile293.uf.daum.net/image/12501308494D29C121B26C" w="1600" h="1200" />
+    <IMG URL="http://cfile293.uf.daum.net/image/13501308494D29C122D4AE" w="1600" h="1200" />
+</SHARE>
 
 <FRIEND>
-  <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/비.jpg" w="800" h="600" />
-  <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/서태지.bmp" w="512" h="384" />
-  <IMG URL="http://www.imgserver.co.kr/pub/ANIMAL/신승훈.jpg" w="1024" h="768" />
+    <김사랑>
+	    <IMG URL="http://cfile290.uf.daum.net/image/15080D06494D19491653F2" w="800" h="600" />
+	    <IMG URL="http://cfile290.uf.daum.net/image/12080D06494D194B1C0041" w="512" h="384" />
+	    <IMG URL="http://cfile293.uf.daum.net/image/15501308494D29C01E385A" w="1024" h="768" />
+    </김사랑>
+
+    <박보영>
+	    <IMG URL="http://cfile293.uf.daum.net/image/11501308494D29C01F157A" w="1600" h="1200" />
+	    <IMG URL="http://cfile293.uf.daum.net/image/11501308494D29C120870A" w="1600" h="1200" />
+	    <IMG URL="http://cfile293.uf.daum.net/image/12501308494D29C121B26C" w="1600" h="1200" />
+	    <IMG URL="http://cfile293.uf.daum.net/image/13501308494D29C122D4AE" w="1600" h="1200" />
+	    <IMG URL="http://cfile293.uf.daum.net/image/15501308494D29C22364FD" w="1600" h="1200" />
+    </박보영>
 </FRIEND>
 

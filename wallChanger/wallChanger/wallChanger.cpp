@@ -2,8 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "wallChanger.h"
-#include "wallChangerDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

@@ -190,10 +190,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\myTree.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Option.cpp"
 				>
 			</File>
@@ -245,10 +241,6 @@
 			>
 			<File
 				RelativePath=".\ImgTree.h"
-				>
-			</File>
-			<File
-				RelativePath=".\myTree.h"
 				>
 			</File>
 			<File

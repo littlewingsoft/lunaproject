@@ -2,8 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "wallChanger.h"
-#include "wallChangerDlg.h"
+
 #include "Option.h"
 #include "ImgTree.h"
 
@@ -15,11 +14,12 @@ Option* g_Option =0;
 ImgTree* g_ImgTree=0 ;
 TiXmlDocument g_servXml;
 
-
+CwallChangerDlg* g_pkMainDlg = 0;
 CwallChangerDlg::CwallChangerDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CwallChangerDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	g_pkMainDlg = this;
 }
 
 
@@ -45,11 +45,23 @@ END_MESSAGE_MAP()
 void CwallChangerDlg::Print( const TCHAR* str )
 {
 	CListBox* pkBox = (CListBox*)GetDlgItem( IDC_LIST2);
-	pkBox->InsertString(-1, str );
+	int ret = pkBox->InsertString( -1, str );
+	pkBox->SetCurSel(ret);
 }
 void CwallChangerDlg::PresetPaper()
 {
-	CString URL = _T("http://pds105.cafe.daum.net/image/3/cafe/2008/12/16/13/53/4947344dc5dd4");
+	if( g_ImgTree->urlTable.empty() )
+	{
+		//g_ImgTree->MakeUrlTable();
+		return;
+	}
+
+	size_t index = rand() % g_ImgTree->urlTable.size();
+	
+	TCHAR szUniCode[256]={0,};
+	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, g_ImgTree->urlTable[index].c_str(), g_ImgTree->urlTable[index].size(), szUniCode, 256);
+
+	CString URL =  szUniCode ; //_T("http://pds105.cafe.daum.net/image/3/cafe/2008/12/16/13/53/4947344dc5dd4");
 
 	
 	HRESULT hr = ::URLDownloadToFile( NULL, URL, _T("c:\\img.jpg"), 0, 0);
@@ -159,7 +171,8 @@ void CwallChangerDlg::DownLoadXml()
 
 void CwallChangerDlg::SetDelayTimer()
 {
-	SetTimer( 100, 1000, 0 );
+	KillTimer( 100 );
+	SetTimer( 100, g_Option->m_DelayTime*60*1000, 0 );
 }
 
 #include <algorithm>
@@ -208,7 +221,6 @@ BOOL CwallChangerDlg::OnInitDialog()
 	m_Tab.AddTab( g_Option, _T("Option" ) );
 	}
 
-	
 //	CComboBox* pkCombo = (CComboBox*)GetDlgItem( IDC_COMBO3 );
 //	pkCombo->SetCurSel(0);
 	
@@ -221,6 +233,7 @@ BOOL CwallChangerDlg::OnInitDialog()
 	DownLoadXml();
 	ChangeWallPaper();
 	SetDelayTimer();
+
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -275,7 +288,6 @@ HCURSOR CwallChangerDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
 void CwallChangerDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -283,7 +295,8 @@ void CwallChangerDlg::OnTimer(UINT_PTR nIDEvent)
 	{
 	case 100:
 		{
-			
+			ChangeWallPaper();
+			Print(_T("바탕화면 바뀌었다") );
 		}
 		break;
 	}
