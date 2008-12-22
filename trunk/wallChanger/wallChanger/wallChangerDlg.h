@@ -23,6 +23,8 @@ public:
 	void SettingOption();
 	void ChangeWallPaper();
 	void PresetPaper();
+	
+	void Print_Now( const TCHAR* str );
 	void Print( const TCHAR* str );
 // 구현입니다.
 protected:
@@ -37,10 +39,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	afx_msg void OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult);
+
 	// tab control 
 	CXTabCtrl m_Tab;
 	afx_msg void OnDestroy();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButton3();
 };
-
+extern TiXmlDocument g_servXml;
 extern CwallChangerDlg* g_pkMainDlg;

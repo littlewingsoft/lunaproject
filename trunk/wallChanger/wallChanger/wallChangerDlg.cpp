@@ -33,14 +33,23 @@ BEGIN_MESSAGE_MAP(CwallChangerDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	//}}AFX_MSG_MAP
 	ON_WM_TIMER()
-	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB1, &CwallChangerDlg::OnTcnSelchangeTab1)
 	ON_WM_DESTROY()
+	ON_BN_CLICKED(IDC_BUTTON1, &CwallChangerDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON3, &CwallChangerDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
 
+void CwallChangerDlg::Print_Now( const TCHAR* str )
+{
+	CListBox* pkBox = (CListBox*)GetDlgItem( IDC_LIST2);
+	int ret = pkBox->GetCurSel();
+	CString cstr;
+	pkBox->GetText( -1, cstr );
+	cstr = str;
+	//pkBox->SetCurSel(ret);
+}
 
 void CwallChangerDlg::Print( const TCHAR* str )
 {
@@ -156,8 +165,7 @@ void CwallChangerDlg::ChangeWallPaper()
 
 void CwallChangerDlg::SettingOption()
 {
-//	CComboBox* pkCombo = (CComboBox*)GetDlgItem( IDC_COMBO2 );
-//	pkCombo->SetCurSel(0);	
+	//로그인했다면 자기 계정의 xml 파일을 얻어옴.
 }
 
 void CwallChangerDlg::DownLoadXml()
@@ -166,16 +174,21 @@ void CwallChangerDlg::DownLoadXml()
 //	HRESULT hr = ::URLDownloadToFile( NULL, URL, _T("wallpaperList.Xml"), 0, 0 );
 	//xml 다운받음.
 	g_servXml.LoadFile( "wallpaperList.xml" );
+	Print( _T("DownLoad Xml" ) );
 	SettingOption();
+	
+
 }
 
 void CwallChangerDlg::SetDelayTimer()
 {
-	KillTimer( 100 );
-	SetTimer( 100, g_Option->m_DelayTime*60*1000, 0 );
+	KillTimer(100);
+	if( g_Option )
+	SetTimer( 100, g_Option->m_DelayTime * 1000 ,0 );
 }
 
 #include <algorithm>
+#include "wallChangerDlg.h"
 // CwallChangerDlg 메시지 처리기
 
 BOOL CwallChangerDlg::OnInitDialog()
@@ -208,6 +221,7 @@ BOOL CwallChangerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	DownLoadXml();
 
 	{
 	g_ImgTree = new ImgTree;
@@ -221,18 +235,8 @@ BOOL CwallChangerDlg::OnInitDialog()
 	m_Tab.AddTab( g_Option, _T("Option" ) );
 	}
 
-//	CComboBox* pkCombo = (CComboBox*)GetDlgItem( IDC_COMBO3 );
-//	pkCombo->SetCurSel(0);
-	
+	m_Tab.SetMouseOverColor( RGB(0xff,0x10,0x10));
 
-	//SetDlgItemInt( IDC_EDIT1, 5 );
-	
-	
-	//SaveCurrentWallPicture() ; // 현재 프로그램이 종료되면 원래 바탕화면으로 되돌리기 위해 저장시켜놓는다.
-
-	DownLoadXml();
-	ChangeWallPaper();
-	SetDelayTimer();
 
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
@@ -303,11 +307,7 @@ void CwallChangerDlg::OnTimer(UINT_PTR nIDEvent)
 	CDialog::OnTimer(nIDEvent);
 }
 
-void CwallChangerDlg::OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	*pResult = 0;
-}
+
 
 void CwallChangerDlg::OnDestroy()
 {
@@ -325,5 +325,41 @@ void CwallChangerDlg::OnDestroy()
 		delete g_ImgTree;
 		g_ImgTree=0;
 	}
+
+}
+
+
+BOOL CwallChangerDlg::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	switch( pMsg ->message )
+	{
+	case WM_KEYDOWN:
+		switch( pMsg->wParam )
+		{
+		case VK_RETURN:
+			return TRUE;
+		}
+		break;
+	}
+	return CDialog::PreTranslateMessage(pMsg);
+}
+
+// stop
+void CwallChangerDlg::OnBnClickedButton1()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	KillTimer(100);
+}
+
+
+// Play
+void CwallChangerDlg::OnBnClickedButton3()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if( g_ImgTree )
+	g_ImgTree->MakeUrlTable();
+
+	SetDelayTimer();
 
 }
