@@ -97,14 +97,28 @@ void CXTabCtrl::AddTab(CWnd* pWnd, LPTSTR lpszCaption, int iImage)
 	item.pszText = lpszCaption;
 	item.iImage = iImage;
 
+	RECT rt;
+	this->GetClientRect( &rt );
+	int parentcenterX = (rt.right - rt.left)/2;
+	int parentcenterY = (rt.bottom - rt.top)/2;
+
+	pWnd->GetClientRect( &rt );
+	int tabcenterX = ( rt.right - rt.left )/ 2;
+	int tabcenterY = ( rt.bottom - rt.top ) /2;
+
 	int iIndex = m_arrayStatusTab.GetSize();
 	InsertItem(iIndex, &item);
 
-	pWnd->SetWindowPos(NULL, m_ptTabs.x, m_ptTabs.y , 0, 0,
+//	pWnd->SetWindowPos(NULL, m_ptTabs.x, m_ptTabs.y , 0, 0,
+//						SWP_FRAMECHANGED | SWP_NOSIZE | SWP_NOZORDER);
+
+	pWnd->SetWindowPos(NULL, parentcenterX - tabcenterX, parentcenterY -tabcenterY , 0, 0,
 						SWP_FRAMECHANGED | SWP_NOSIZE | SWP_NOZORDER);
 	
 	pWnd->ShowWindow(iIndex ? SW_HIDE : SW_SHOW);
 
+	
+	
 	//** the initial status is enabled
 	m_arrayStatusTab.Add(TRUE); 
 

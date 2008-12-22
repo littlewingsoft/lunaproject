@@ -4,20 +4,20 @@
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
+#define IDD_CONSOLE                     100
 #define IDS_ABOUTBOX                    101
 #define IDD_WALLCHANGER_DIALOG          102
 #define IDR_MAINFRAME                   128
 #define IDD_DIALOG1                     130
 #define IDD_DIALOG2                     131
-#define IDC_EDIT1                       1003
 #define IDC_EDIT_DELAYTIME              1003
 #define IDC_COMBO3                      1004
 #define IDC_LIST2                       1009
-#define IDC_EDIT2                       1011
 #define IDC_BUTTON1                     1012
 #define IDC_TAB1                        1013
 #define IDC_BUTTON2                     1013
 #define IDC_IMGTREE1                    1014
+#define IDC_BUTTON3                     1014
 
 // Next default values for new objects
 // 

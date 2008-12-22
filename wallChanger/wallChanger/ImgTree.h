@@ -26,12 +26,16 @@ protected:
 public:
 	void MakeUrlTable();
 	CTreeCtrl m_Tree;
-	
+	CImageList m_ImageList;
 	std::vector<std::string > urlTable; //basic_string<TCHAR>
 	void SettingTree();
-//	afx_msg void OnTvnItemChangedTree1(NMHDR *pNMHDR, LRESULT *pResult);
+
+	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnNMClickTree1(NMHDR *pNMHDR, LRESULT *pResult);
-//	afx_msg void OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult);
-//	afx_msg void OnTvnItemChangingTree1(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+
+	afx_msg void OnBnClickedButton1();
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnNMDblclkImgtree1(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnTvnEndlabeleditImgtree1(NMHDR *pNMHDR, LRESULT *pResult);
 };

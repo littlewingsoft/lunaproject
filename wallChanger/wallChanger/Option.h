@@ -1,4 +1,5 @@
 #pragma once
+#include "afxwin.h"
 
 
 // Option 대화 상자입니다.
@@ -20,5 +21,10 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	UINT m_DelayTime;
+//	afx_msg void OnEnChangeEditDelaytime();
+	// WallPaper 의 형태 3가지에 대한 설명.
+	CComboBox m_Style;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+
 	afx_msg void OnEnChangeEditDelaytime();
 };
