@@ -38,6 +38,8 @@
 #include "tinyxml/tinyXml.h"
 #include "xtabCtrl.h"
 
+#include <gdiplus.h>
+
 #include "wallChanger.h"
 #include "wallChangerDlg.h"
 

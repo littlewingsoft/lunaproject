@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "wallChanger.h"
 #include "ImgTree.h"
-
+#include "resource.h"
 
 // ImgTree 대화 상자입니다.
 
@@ -156,6 +156,10 @@ BEGIN_MESSAGE_MAP(ImgTree, CDialog)
 	ON_WM_KEYDOWN()
 	ON_NOTIFY(NM_DBLCLK, IDC_IMGTREE1, &ImgTree::OnNMDblclkImgtree1)
 	ON_NOTIFY(TVN_ENDLABELEDIT, IDC_IMGTREE1, &ImgTree::OnTvnEndlabeleditImgtree1)
+	ON_WM_CONTEXTMENU()
+	ON_NOTIFY(NM_RCLICK, IDC_IMGTREE1, &ImgTree::OnNMRClickImgtree1)
+	ON_COMMAND(ID_MENU_NEW, &ImgTree::OnNewFolder)
+	ON_COMMAND(ID_MENU_DELETE, &ImgTree::OnDeleteFolder)
 END_MESSAGE_MAP()
 // ImgTree 메시지 처리기입니다.
 
@@ -277,30 +281,39 @@ BOOL ImgTree::PreTranslateMessage(MSG* pMsg)
 
 			HTREEITEM hItem = m_Tree.HitTest( point, &nFlags);
 			//*pResult = 0;
-			if ((hItem != NULL) && (TVHT_ONITEM& nFlags))//TVHT_ONITEMSTATEICON 
+			if( hItem != NULL )
 			{
-				// get the state
-				BOOL checked = FALSE;
-				checked = TreeView_GetCheckState( m_Tree.GetSafeHwnd(), hItem ); // 현재상황의 반대로 하면됨. 현재 체크가 안되있는데 체크 하려는것임.
-				//if( TVHT_ONITEMSTATEICON & nFlags )
-				checked = !checked;
-				
-				if( (TVHT_ONITEMLABEL & nFlags ) | (TVHT_ONITEMICON &nFlags ) )
-				TreeView_SetCheckState( m_Tree.GetSafeHwnd(), hItem, checked );
+				if( TVHT_ONITEMSTATEICON& nFlags )//TVHT_ONITEM
+				{
+					// get the state
+					BOOL checked = FALSE;
+					checked = TreeView_GetCheckState( m_Tree.GetSafeHwnd(), hItem ); // 현재상황의 반대로 하면됨. 현재 체크가 안되있는데 체크 하려는것임.
+					//if( TVHT_ONITEMSTATEICON & nFlags )
+					checked = !checked;
 
-				// 내 형제들과 체크 상태가 모두 같을때만 내 부모에 영향을 미친다.
-				BOOL bSiblingCheck = checked;
-				SetCheckparent( m_Tree, checked, bSiblingCheck, hItem );
+					if( (TVHT_ONITEMLABEL & nFlags ) | (TVHT_ONITEMICON &nFlags ) )
+						TreeView_SetCheckState( m_Tree.GetSafeHwnd(), hItem, checked );
 
-				// 자식설정.
-				HTREEITEM hChild = m_Tree.GetChildItem( hItem );
-				SetCheckChildren( m_Tree,  checked, hChild );
+					// 내 형제들과 체크 상태가 모두 같을때만 내 부모에 영향을 미친다.
+					BOOL bSiblingCheck = checked;
+					SetCheckparent( m_Tree, checked, bSiblingCheck, hItem );
 
-				m_Tree.SelectItem( hItem );
-				//		*pResult = 1;
+					// 자식설정.
+					HTREEITEM hChild = m_Tree.GetChildItem( hItem );
+					SetCheckChildren( m_Tree,  checked, hChild );
+
+					m_Tree.SelectItem( hItem );
+				}
+				else if( (TVHT_ONITEMLABEL& nFlags) || (TVHT_ONITEMICON& nFlags) )//TVHT_ONITEM
+				{
+					m_Tree.Expand( hItem, TVE_TOGGLE );
+				}
+
 			}
+			
+
 		}
-		return FALSE;
+		break;
 	case WM_LBUTTONDBLCLK:
 		return TRUE;
 	}
@@ -323,4 +336,84 @@ void ImgTree::OnTvnEndlabeleditImgtree1(NMHDR *pNMHDR, LRESULT *pResult)
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
 	*pResult = 0;
+}
+
+void ImgTree::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+
+
+	//if( dwSelect ==  )
+
+
+}
+
+void ImgTree::OnNMRClickImgtree1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	DWORD cur_pos = ::GetMessagePos(); 
+	CPoint point(LOWORD(cur_pos), HIWORD(cur_pos)); 
+	// mouse pointer의 위치를 tree control의 좌표로 바꾸어 준다. 
+	m_Tree.ScreenToClient(&point); 
+	UINT nFlags = 0; 
+	// click이 일어난 위치가 tree control의 check box였는지를 확인한다. 
+	// 만약 click이 tree control의 check box였다면 CTreeCtrl::HitTest의 두 번째 parameter에
+	// TVHT_ONITEMSTATEICON mask가 1로 setting 된다.
+
+	HTREEITEM hItem = m_Tree.HitTest( point, &nFlags);
+	//*pResult = 0;
+	if ((hItem != NULL) && (TVHT_ONITEM& nFlags))//TVHT_ONITEMSTATEICON 
+	{
+		m_Tree.SelectItem( hItem );
+
+		DWORD cur_pos = ::GetMessagePos(); 
+		CPoint point(LOWORD(cur_pos), HIWORD(cur_pos)); 
+		CMenu menu ;
+		menu.LoadMenu( IDR_MENU1 ) ;  //IDR_LIST = 메뉴 이름
+		CMenu * pMenu = menu.GetSubMenu( 0 ) ;
+		DWORD dwSelect = pMenu->TrackPopupMenu(  TPM_LEFTALIGN | TPM_LEFTBUTTON |TPM_NONOTIFY  , point.x,point.y, this );//
+		pMenu->DestroyMenu();
+
+		
+	}
+	*pResult = 0;
+}
+
+void ImgTree::OnNewFolder()
+{
+	HTREEITEM hItem = m_Tree.GetSelectedItem();
+
+	if( hItem != NULL )// && (TVHT_ONITEM& nFlags) TVHT_ONITEMSTATEICON 
+	{
+		HTREEITEM hNew = m_Tree.InsertItem( _T("새폴더") , hItem );
+		m_Tree.SelectItem( hNew );
+		BOOL bCheck = TreeView_GetCheckState( m_Tree.GetSafeHwnd(), hItem );
+		TreeView_SetCheckState( m_Tree.GetSafeHwnd(), hNew, bCheck );
+	}	
+}
+
+void ImgTree::OnDeleteFolder()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+	HTREEITEM hItem = m_Tree.GetSelectedItem();
+
+	if( hItem != NULL )// && (TVHT_ONITEM& nFlags) TVHT_ONITEMSTATEICON 
+	{
+		int ret = MessageBox( _T("Do you Really Want?"),_T("NOTICE"),MB_YESNO );
+		if( ret == IDNO )
+		{
+			return;
+		}
+		//HTREEITEM hNew = m_Tree.InsertItem( _T("새폴더") , hItem );
+		//m_Tree.SelectItem( hNew );
+		//BOOL bCheck = TreeView_GetCheckState( m_Tree.GetSafeHwnd(), hItem );
+		//TreeView_SetCheckState( m_Tree.GetSafeHwnd(), hNew, bCheck );
+		HTREEITEM hParent = m_Tree.GetParentItem( hItem );
+		if( hParent )
+			m_Tree.SelectItem(hParent );
+
+		m_Tree.DeleteItem( hItem );
+	}	
 }

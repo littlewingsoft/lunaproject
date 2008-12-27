@@ -38,4 +38,8 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnNMDblclkImgtree1(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnTvnEndlabeleditImgtree1(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+	afx_msg void OnNMRClickImgtree1(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNewFolder();
+	afx_msg void OnDeleteFolder();
 };

@@ -40,6 +40,27 @@ BEGIN_MESSAGE_MAP(CwallChangerDlg, CDialog)
 END_MESSAGE_MAP()
 
 
+CString GetImageExt( CString& fName )
+{
+   Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+   ULONG_PTR gdiplusToken;
+   Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+   Gdiplus::Image* img = ::new Gdiplus::Image( fName );
+   UINT imageHeight = img->GetHeight();
+   //printf("The height of the image is %u.\n", imageHeight);
+   Gdiplus::ImageType tp = img->GetType();
+
+   ::delete img;
+   Gdiplus::GdiplusShutdown(gdiplusToken);
+
+   CString ext= _T("jpg");
+   
+   if( tp == Gdiplus::ImageTypeMetafile )
+	ext = _T("gif");
+
+   return ext;
+}
 
 void CwallChangerDlg::Print_Now( const TCHAR* str )
 {
@@ -57,6 +78,9 @@ void CwallChangerDlg::Print( const TCHAR* str )
 	int ret = pkBox->InsertString( -1, str );
 	pkBox->SetCurSel(ret);
 }
+
+CString g_ImgName;
+
 void CwallChangerDlg::PresetPaper()
 {
 	if( g_ImgTree->urlTable.empty() )
@@ -72,8 +96,25 @@ void CwallChangerDlg::PresetPaper()
 
 	CString URL =  szUniCode ; //_T("http://pds105.cafe.daum.net/image/3/cafe/2008/12/16/13/53/4947344dc5dd4");
 
+	CString fName= _T("atmpimg.jpg");
+	HRESULT hr = ::URLDownloadToFile( NULL, URL, fName, 0, 0);
+	// 파일을 읽어서 타입을 알아내야 한다.
+	//jpg,png,gif ?
+	CString ext = GetImageExt( fName );//_T("");//
+
 	
-	HRESULT hr = ::URLDownloadToFile( NULL, URL, _T("c:\\img.jpg"), 0, 0);
+	g_ImgName = fName;//+_T(".")+ext;
+	//int ret = _trename( fName.GetString(), g_ImgName.GetString() );
+	/*switch( ret )
+	{
+	case EACCES :
+		break;
+	case EINVAL :
+		break;
+	case ENOENT :
+		break;
+	}*/
+	
 	Print( _T("[INFO] 이미지 다운로드중") );
 }
 
@@ -119,7 +160,7 @@ void CwallChangerDlg::ChangeWallPaper()
 			Registry::SetRegString( _T("Control Panel\\Desktop"), _T("WallpaperStyle"), cstrWallpaperStyle);
 
 			// Change the wallpaper.
-			BOOL ret = SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, (void*)L"c:\\img.jpg", 
+			BOOL ret = SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, ((PVOID)(g_ImgName.GetBuffer(128))),  //(void*) ((TCHAR*)
 				SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);	
 	}
 	else
@@ -148,7 +189,7 @@ void CwallChangerDlg::ChangeWallPaper()
 //		pIActiveDesktop->GetWallpaper( buff, 256,AD_GETWP_LAST_APPLIED );// AD_GETWP_IMAGE AD_GETWP_BMP 
 
 		// Set the wallpaper image.
-		pIActiveDesktop->SetWallpaper( _T("c:\\img.jpg"), 0) ;
+		pIActiveDesktop->SetWallpaper( g_ImgName, 0) ;
 
 		// Apply all changes.
 		pIActiveDesktop->ApplyChanges(AD_APPLY_ALL);
