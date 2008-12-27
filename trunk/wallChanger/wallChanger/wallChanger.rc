@@ -101,7 +101,7 @@ IDD_DIALOG1 DIALOGEX 0, 0, 196, 144
 STYLE DS_ABSALIGN | DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_CHILD | WS_SYSMENU
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_IMGTREE1,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_NOTOOLTIPS | TVS_CHECKBOXES | TVS_NOHSCROLL | WS_BORDER | WS_TABSTOP,6,2,183,122
+    CONTROL         "",IDC_IMGTREE1,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_NOTOOLTIPS | TVS_CHECKBOXES | WS_BORDER | WS_HSCROLL | WS_TABSTOP,6,2,183,122
     PUSHBUTTON      "Check/UnCheck",IDC_BUTTON1,40,127,115,14
 END
 
@@ -206,6 +206,21 @@ BEGIN
     IDC_COMBO3, 0x403, 9, 0
 0xddb9, 0xb9ba, 0xcfc7, 0xe2b1, "\000" 
     0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "MENU"
+    BEGIN
+        MENUITEM "New",                         ID_MENU_NEW
+        MENUITEM "Delete",                      ID_MENU_DELETE
+    END
 END
 
 
