@@ -40,27 +40,27 @@ BEGIN_MESSAGE_MAP(CwallChangerDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-CString GetImageExt( CString& fName )
-{
-   Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-   ULONG_PTR gdiplusToken;
-   Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-
-   Gdiplus::Image* img = ::new Gdiplus::Image( fName );
-   UINT imageHeight = img->GetHeight();
-   //printf("The height of the image is %u.\n", imageHeight);
-   Gdiplus::ImageType tp = img->GetType();
-
-   ::delete img;
-   Gdiplus::GdiplusShutdown(gdiplusToken);
-
-   CString ext= _T("jpg");
-   
-   if( tp == Gdiplus::ImageTypeMetafile )
-	ext = _T("gif");
-
-   return ext;
-}
+//CString GetImageExt( CString& fName )
+//{
+//   Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+//   ULONG_PTR gdiplusToken;
+//   Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+//
+//   Gdiplus::Image* img = ::new Gdiplus::Image( fName );
+//   UINT imageHeight = img->GetHeight();
+//   //printf("The height of the image is %u.\n", imageHeight);
+//   Gdiplus::ImageType tp = img->GetType();
+//
+//   ::delete img;
+//   Gdiplus::GdiplusShutdown(gdiplusToken);
+//
+//   CString ext= _T("jpg");
+//   
+//   if( tp == Gdiplus::ImageTypeMetafile )
+//	ext = _T("gif");
+//
+//   return ext;
+//}
 
 void CwallChangerDlg::Print_Now( const TCHAR* str )
 {
@@ -100,7 +100,7 @@ void CwallChangerDlg::PresetPaper()
 	HRESULT hr = ::URLDownloadToFile( NULL, URL, fName, 0, 0);
 	// 파일을 읽어서 타입을 알아내야 한다.
 	//jpg,png,gif ?
-	CString ext = GetImageExt( fName );//_T("");//
+//	CString ext = GetImageExt( fName );//_T("");//
 
 	
 	g_ImgName = fName;//+_T(".")+ext;
@@ -403,4 +403,123 @@ void CwallChangerDlg::OnBnClickedButton3()
 
 	SetDelayTimer();
 
+}
+
+
+typedef BOOL (CALLBACK* REQUESTCALLBACK)(LPCTSTR, UINT, UINT);
+
+BOOL UploadFile(CString &Filename, REQUESTCALLBACK pcbfn /* = NULL */) 
+{
+	//http://jungmoona.gotdns.com/
+	#define BASE_UPLOAD_PATH "img" 
+
+		CString m_Host( "http://jungmoona.gotdns.com/" );
+      CInternetSession m_Session;
+      CHttpConnection *pServer = NULL;
+      CHttpFile *pFile = NULL;
+      CString BaseFilename;
+      DWORD dwTotalLen;
+      LPVOID lpBuf[1024];
+      CString m_ServerPath;
+      CFileException E;
+      CStdioFile UpFile;
+      CString str;
+
+      UINT bytesRead = 0;
+      UINT totalRead = 0;
+
+      TRACE0("UploadFile()\n");
+            
+      //m_Response.RemoveAll();
+      //ResponseIndex = 0;
+      
+      if(!UpFile.Open(Filename, CFile::modeRead | CFile::typeBinary | CFile::shareExclusive, &E)) {
+            if(E.m_cause == CFileException::fileNotFound) {
+                  TRACE0("Upload file cannot be found\n");
+                  str.Format(_T("Error:%d:The file to upload could not be found"),-1);
+                  //m_Response.Add(str);   
+            }
+            else {
+                  TRACE0("Upload file could not be opened\n");
+                  str.Format(_T("Error:%d:The file to upload could not be opened"),-1);
+                  //m_Response.Add(str);   
+            }
+            return FALSE;
+     }
+      dwTotalLen = (DWORD)UpFile.GetLength();
+      if(dwTotalLen == 0) {
+            TRACE0("Upload file is empty\n");
+            str.Format(_T("Error:%d:The file to upload is empty"),-1);
+            return FALSE;
+      }
+
+      BaseFilename = Filename;
+      if(Filename.Find('\\') > -1) {
+            BaseFilename = Filename.Right(Filename.GetLength() - (Filename.ReverseFind('\\') + 1));
+      }
+      m_ServerPath.Format(_T("%s/%s"), BASE_UPLOAD_PATH, BaseFilename);
+
+      try {
+
+            pServer = m_Session.GetHttpConnection(m_Host);
+            pFile = pServer->OpenRequest( CHttpConnection::HTTP_VERB_PUT, m_ServerPath );//, USER_AGENT, 1, NULL, HTTP_VERSION, INTERNET_FLAG_NO_CACHE_WRITE); 
+            pFile->SendRequestEx(dwTotalLen);
+
+            do {
+                  
+                  if((bytesRead = UpFile.Read(lpBuf, 1023))) {
+                        pFile->Write(lpBuf, bytesRead);
+                        totalRead += bytesRead;
+
+                        if (pcbfn)
+                        {
+                              if(!pcbfn(Filename, totalRead, dwTotalLen)) {
+                                    UpFile.Close();
+                                    
+                                    pFile->EndRequest();
+                                    pFile->Close();
+                                    pServer->Close();
+                                                      
+                                    if(pFile != NULL) delete pFile;
+                                    if(pServer != NULL) delete pServer;
+                                                      
+                                    m_Session.Close();
+                                                      
+                                    str.Format(_T("Error:%d:Upload terminated by user"), -1); //ERROR_USER_TERMINATION
+                                    return FALSE;                                          
+                              }
+                        }
+                  }
+            } while(bytesRead > 0);
+      }
+      catch(CInternetException *e) {
+            TCHAR szErr[1024];
+            e->GetErrorMessage(szErr, 1024);
+                  
+            str.Format(_T("Error:%d:%s"), -1, szErr); //ERROR_FILE_UPLOAD
+            //m_Response.Add(str);
+            TRACE1("Upload Error: %s\n", str);
+            e->Delete();
+            return FALSE;
+      }
+      
+      pFile->EndRequest();
+      pFile->Close();
+      pServer->Close();
+
+      if (pFile != NULL) delete pFile;
+      if (pServer != NULL) delete pServer;
+      
+      m_Session.Close();
+      
+      if(totalRead != dwTotalLen) {
+            str.Format(_T("Error:%d:Write error on upload"), -1);//ERROR_FILE_UPLOAD
+            //m_Response.Add(str);
+            return FALSE;
+      }
+      
+      UrlEncode(BaseFilename);
+      m_Query.Format(_T("action=verifyupload&filename=%s&filesize=%u"), BaseFilename, dwTotalLen);
+      
+      return Request(m_Query, VERIFY_UPLOAD_ACTION);
 }
