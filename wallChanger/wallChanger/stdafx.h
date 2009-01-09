@@ -22,6 +22,7 @@
 #include <afxwin.h>         // MFC 핵심 및 표준 구성 요소입니다.
 #include <afxext.h>         // MFC 확장입니다.
 #include <wininet.h>		// This has to be included here, since IActiveDesktop uses
+#include <afxinet.h>
 #include <afxdisp.h>        // MFC 자동화 클래스입니다.
 
 #ifndef _AFX_NO_OLE_SUPPORT
