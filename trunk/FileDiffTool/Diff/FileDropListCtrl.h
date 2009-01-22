@@ -77,6 +77,8 @@ public:
 	DROPLISTMODE m_dropMode;
 	BOOL m_bMustUninitOLE;
 
+	HANDLE m_hEvent;
+
 	CString ExpandShortcut(CString& csFilename) const;
 	BOOL ValidatePathname(const CString& csPathname, UINT& iPathType) const;
 	void RecursiveFind(const CString& rootPath );
@@ -99,7 +101,7 @@ private:
 };
 
 /////////////////////////////////////////////////////////////////////////////
-
+extern HANDLE g_hThread;
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
