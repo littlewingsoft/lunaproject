@@ -19,6 +19,7 @@ public:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 
 
+	
 // 구현입니다.
 protected:
 	HICON m_hIcon;
@@ -33,5 +34,14 @@ public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnDestroy();
 	afx_msg void OnBnClickedButton2();
+
+		BOOL m_bDestroy;
+		BOOL m_bCancelThread;
+		afx_msg void OnBnClickedButton3();
+		afx_msg void OnBnClickedButton4();
+		afx_msg void OnClose();
+		virtual BOOL PreTranslateMessage(MSG* pMsg);
+		afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 extern CDiffDlg* g_pkMainDlg;
+extern CRITICAL_SECTION cs;

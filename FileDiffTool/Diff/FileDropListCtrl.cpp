@@ -35,9 +35,7 @@
 #include <process.h>
 
 #include "DiffDlg.h"
-
-HANDLE g_hThread  = 0;
-HDROP g_hdRop = 0;
+#include <set>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -47,8 +45,17 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 
+HANDLE g_hThread = 0;
+HDROP g_hdRop = 0;
+
+std::set<int> duplicateSet;
+/////////////////////////////////////////////////////////////////////////////
+
 CFileDropListCtrl::CFileDropListCtrl()
 {
+	CloseHandle( m_hEvent );
+	m_hEvent = CreateEvent( 0, TRUE, FALSE, L"event" );
+	ResetEvent( m_hEvent );
 	//
 	// Default drop mode
 	//
@@ -73,9 +80,8 @@ CFileDropListCtrl::CFileDropListCtrl()
 
 CFileDropListCtrl::~CFileDropListCtrl()
 {
-	_endthreadex(0);
-	CloseHandle( g_hThread );
-	g_hThread = 0;
+	CloseHandle( m_hEvent );
+
 	if(m_bMustUninitOLE)
 	{
 		::OleUninitialize();
@@ -96,12 +102,12 @@ int CFileDropListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CListCtrl::OnCreate(lpCreateStruct) == -1)
 		return -1;
-	
+
 	//
 	// Register ourselves as a drop target for files
 	//
 	DragAcceptFiles(TRUE);
-	
+
 	return 0;
 }
 
@@ -140,6 +146,15 @@ BOOL CFileDropListCtrl::SetDropMode(const CFileDropListCtrl::DROPLISTMODE& dropM
 
 void CFileDropListCtrl::RecursiveFind(const CString& rootPath )
 {
+	if( g_pkMainDlg->m_bDestroy )
+	{
+		g_pkMainDlg->SetDlgItemInt(IDC_EDIT1, 0 );
+		DeleteAllItems();
+		g_hThread=0;
+		g_pkMainDlg->OnClose();
+		return ;
+	}
+
 	// 현재 지정된currPath 의 모든 파일과 폴더를 돌아요.
 	WIN32_FIND_DATA lpFindFileData;
 	HANDLE hFirstFile = FindFirstFile( rootPath, &lpFindFileData );
@@ -147,10 +162,18 @@ void CFileDropListCtrl::RecursiveFind(const CString& rootPath )
 
 	while( 1 )
 	{
-	size_t offset = rootPath.Find( L"*" );
-	CString fullpath  = rootPath.Left( offset );
-	CString name = lpFindFileData.cFileName;
-	fullpath += name;
+		if( g_pkMainDlg->m_bCancelThread )
+		{
+			g_pkMainDlg->SetDlgItemInt(IDC_EDIT1, 0 );
+			DeleteAllItems();
+			break;
+		}
+
+
+		size_t offset = rootPath.Find( L"*" );
+		CString fullpath  = rootPath.Left( offset );
+		CString name = lpFindFileData.cFileName;
+		fullpath += name;
 
 		if( name == L"." || name == L".." || name == L".svn" )
 			goto findNext;
@@ -172,6 +195,13 @@ findNext:
 		}
 
 	}
+
+	if( g_pkMainDlg->m_bDestroy )
+	{
+		g_hThread=0;
+		g_pkMainDlg->OnClose();
+	}
+
 }
 
 void CFileDropListCtrl::InsertRecord( CString& csPathname )
@@ -212,16 +242,27 @@ unsigned int __stdcall ThreadFunc(void *ArgList)
 	CString csPathname;
 	CString csExpandedFilename;
 
+	g_pkMainDlg->m_bCancelThread = false;
+
 	for (UINT nFile = 0 ; nFile < nNumFilesDropped; nFile++)
 	{
+		//	WaitForSingleObject( pkList->m_hEvent , INFINITE );
+		//	EnterCriticalSection( &cs );
+
+		if( g_pkMainDlg->m_bCancelThread )
+		{
+			pkList->DeleteAllItems();
+			break;
+		}
+
 		DragQueryFile( g_hdRop, nFile, szFilename, MAX_PATH + 1);
 
 		csPathname = szFilename;
-		csExpandedFilename = pkList->ExpandShortcut(csPathname);
-		if(!csExpandedFilename.IsEmpty())
-		{
-			csPathname = csExpandedFilename;
-		}
+		//csExpandedFilename = pkList->ExpandShortcut(csPathname);
+		//if(!csExpandedFilename.IsEmpty())
+		//{
+		//	csPathname = csExpandedFilename;
+		//}
 
 		UINT iPathType = 0;
 		if( pkList->ValidatePathname(csPathname, iPathType))
@@ -260,23 +301,34 @@ unsigned int __stdcall ThreadFunc(void *ArgList)
 
 			}
 		}
-	}
-	DragFinish(g_hdRop);
 
-	//CString csCnt;
-	//csCnt.Format( L"TotalFileCount = %d",this->GetItemCount() );
+
+	}
+
+
+
+	if( g_pkMainDlg->m_bDestroy )
+	{
+		g_pkMainDlg->SetDlgItemInt(IDC_EDIT1, 0 );
+		pkList->DeleteAllItems();
+
+		g_pkMainDlg->OnClose();
+
+
+		return -1;
+	}
+
+
+	DragFinish(g_hdRop);
 	g_pkMainDlg->SetDlgItemInt( IDC_EDIT1, pkList->GetItemCount() );
+
+
 
 	pkList->ReCalcCrC();
 
-	CloseHandle( g_hThread );
-	g_hThread = 0;
-//while (WaitForSingleObject(g_hEvent, 0) != WAIT_OBJECT_0) {
-//	Sleep(Second>>2); // sleep for a quarter of a second
-//	cout << "Waiting for signal\n";
-//	}
-//cout << "Thread ending\n";
-return 0;
+	g_pkMainDlg->SetDlgItemInt( IDC_EDIT2, pkList->GetItemCount() - duplicateSet.size() );
+	g_hThread=0;
+	return 0;
 }
 
 
@@ -291,14 +343,14 @@ void CFileDropListCtrl::OnDropFiles(HDROP dropInfo)
 
 	// Thread 를 돌려야 함.
 	{
-		// crc 재계산 해야됨.
+		ResetEvent( m_hEvent );
 		unsigned int ThreadId=0;
 		g_hThread = (HANDLE)_beginthreadex( NULL, 0, ThreadFunc, (void*)this, 0, &ThreadId);
 		if (g_hThread == 0) 
 		{
 			return ;
 		}
-		
+
 		// crc 를 가지고 충돌 되는 것만 재계산.
 	}
 
@@ -307,23 +359,49 @@ void CFileDropListCtrl::OnDropFiles(HDROP dropInfo)
 
 }
 
+
+
 void CFileDropListCtrl::ReCalcCrC()
 {
 	CProgressCtrl* pkPro = (CProgressCtrl*)g_pkMainDlg->GetDlgItem( IDC_PROGRESS1 );
 	int cnt = this->GetItemCount();
 	pkPro->SetRange(0,cnt);
-	
+	bool bCloseMainDlg = false;
+
 	for( int n=0; n< cnt; n++)
 	{
+		if( g_pkMainDlg->m_bCancelThread )
+		{
+			break;
+		}
 		//event 를 체크해봐서 false 라면 아예 break 하게 해버림.
 		// 한번 도는 동안은 Lock!!!
 		CString csFullPath = this->GetItemText( n,2 );	
 		DWORD crc = FileTocrc32( csFullPath.GetBuffer() );
+		duplicateSet.insert(crc);
 		CString tmp;
 		tmp.Format( L"0x%08x" , crc );
 		this->SetItemText( n,1, tmp );
-		this->SetSelectedColumn( n )		;
 		pkPro->SetPos( n );
+
+		g_pkMainDlg->SetDlgItemInt( IDC_EDIT2, GetItemCount() - duplicateSet.size() );
+
+		SetHotItem(n);  // 0번째 아이템을 선택한다.
+		EnsureVisible(n, FALSE);  //0번째 아이템을 확실하게 보여준다
+
+	}
+
+	if( g_pkMainDlg->m_bCancelThread )
+	{
+		pkPro->SetPos(0);
+		g_pkMainDlg->SetDlgItemInt(IDC_EDIT1, 0 );
+		DeleteAllItems();
+	}
+
+	if( g_pkMainDlg->m_bDestroy )
+	{
+		g_hThread=0;
+		g_pkMainDlg->OnClose();
 	}
 }
 
@@ -347,7 +425,7 @@ CString CFileDropListCtrl::ExpandShortcut(CString& csFilename) const
 	CString csExpandedFile;
 
 	//
-    // Make sure we have a path
+	// Make sure we have a path
 	//
 	if(csFilename.IsEmpty())
 	{
@@ -356,53 +434,53 @@ CString CFileDropListCtrl::ExpandShortcut(CString& csFilename) const
 	}
 
 	//
-    // Get a pointer to the IShellLink interface
+	// Get a pointer to the IShellLink interface
 	//
-    HRESULT hr;
-    IShellLink* pIShellLink;
+	HRESULT hr;
+	IShellLink* pIShellLink;
 
-    hr = ::CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
-							IID_IShellLink, (LPVOID*) &pIShellLink);
+	hr = ::CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+		IID_IShellLink, (LPVOID*) &pIShellLink);
 
-    if (SUCCEEDED(hr))
-    {
+	if (SUCCEEDED(hr))
+	{
 
 		//
-        // Get a pointer to the persist file interface
+		// Get a pointer to the persist file interface
 		//
 		IPersistFile* pIPersistFile;
-        hr = pIShellLink->QueryInterface(IID_IPersistFile, (LPVOID*) &pIPersistFile);
+		hr = pIShellLink->QueryInterface(IID_IPersistFile, (LPVOID*) &pIPersistFile);
 
-        if (SUCCEEDED(hr))
-        {
+		if (SUCCEEDED(hr))
+		{
 			//
-            // Load the shortcut and resolve the path
+			// Load the shortcut and resolve the path
 			//
-            // IPersistFile::Load() expects a UNICODE string
+			// IPersistFile::Load() expects a UNICODE string
 			// so we're using the T2COLE macro for the conversion
 			//
 			// For more info, check out MFC Technical note TN059
 			// (these macros are also supported in ATL and are
 			// so much better than the ::MultiByteToWideChar() family)
 			//
-            hr = pIPersistFile->Load(T2COLE(csFilename), STGM_READ);
-			
+			hr = pIPersistFile->Load(T2COLE(csFilename), STGM_READ);
+
 			if (SUCCEEDED(hr))
 			{
 				WIN32_FIND_DATA wfd;
 				hr = pIShellLink->GetPath(csExpandedFile.GetBuffer(MAX_PATH),
-										  MAX_PATH,
-										  &wfd,
-										  SLGP_UNCPRIORITY);
+					MAX_PATH,
+					&wfd,
+					SLGP_UNCPRIORITY);
 
 				csExpandedFile.ReleaseBuffer(-1);
-            }
-            pIPersistFile->Release();
-        }
-        pIShellLink->Release();
-    }
+			}
+			pIPersistFile->Release();
+		}
+		pIShellLink->Release();
+	}
 
-    return csExpandedFile;
+	return csExpandedFile;
 }
 
 
@@ -439,13 +517,13 @@ BOOL CFileDropListCtrl::ValidatePathname(const CString& csPathname, UINT& iPathT
 		//
 		if ((m_dropMode.iMask & DL_ACCEPT_FOLDERS) &&
 			((buf.st_mode & _S_IFDIR) == _S_IFDIR)) 
-	    {
+		{
 			bValid = TRUE;
 			iPathType = DL_FOLDER_TYPE;
 		} 
-	    else if ((m_dropMode.iMask & DL_ACCEPT_FILES) &&
-				((buf.st_mode & _S_IFREG) == _S_IFREG)) 
-	    {
+		else if ((m_dropMode.iMask & DL_ACCEPT_FILES) &&
+			((buf.st_mode & _S_IFREG) == _S_IFREG)) 
+		{
 			// 
 			// We've got a file and files are allowed.
 			//

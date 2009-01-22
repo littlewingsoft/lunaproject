@@ -15,8 +15,8 @@
 
 #include "crc32.h"
 
-
 using namespace std;
+
 
 /*
 -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -222,6 +222,7 @@ int _tmain(int argc, _TCHAR* argv[] )
 	if( argc <= 1 )
 	{
 		printf( "Root Directory 를 입력해주세요. \nex) crc32Text.exe c:\\*\n" );
+
 		return -1;
 	}
 	else
