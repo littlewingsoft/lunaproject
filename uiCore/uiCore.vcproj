@@ -230,34 +230,6 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\lauxlib.h"
-			>
-		</File>
-		<File
-			RelativePath=".\lua.h"
-			>
-		</File>
-		<File
-			RelativePath=".\lua_tinker.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\lua_tinker.h"
-			>
-		</File>
-		<File
-			RelativePath=".\luaconf.h"
-			>
-		</File>
-		<File
-			RelativePath=".\lualib.h"
-			>
-		</File>
-		<File
-			RelativePath=".\luamgr.h"
-			>
-		</File>
-		<File
 			RelativePath=".\ReadMe.txt"
 			>
 		</File>
@@ -290,15 +262,15 @@
 			>
 		</File>
 		<File
+			RelativePath=".\uiCore.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\uiCore.h"
+			>
+		</File>
+		<File
 			RelativePath=".\uiCore.rc"
-			>
-		</File>
-		<File
-			RelativePath=".\uiCore_2008.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\uiCore_2008.h"
 			>
 		</File>
 	</Files>
