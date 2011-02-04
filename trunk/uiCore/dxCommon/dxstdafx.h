@@ -67,14 +67,17 @@
 #endif
 
 // Direct3D includes
-#include <d3d9.h>
-#include <d3dx9.h>
-#include <dxerr9.h>
+//#include <d3d9.h>
+//#include <d3dx9.h>
+//#include <dxerr9.h>
+//#include "../../dxsdk/include/dd3d9.h"
+#include "../../dxsdk/include/d3dx9.h"
+#include "../../dxsdk/include/dxerr9.h"
 
 // DirectSound includes
 #include <mmsystem.h>
 #include <mmreg.h>
-#include <dsound.h>
+#include "../../dxsdk/dsound.h"
 
 // strsafe.h deprecates old unsecure string functions.  If you 
 // really do not want to it to (not recommended), then uncomment the next line 

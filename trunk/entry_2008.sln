@@ -1,11 +1,11 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uiCore", "uiCore\uiCore_2008.vcproj", "{36D61EFD-E004-4275-9551-EA8B1178300E}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uiViewer", "uiViewer\uiViewer_2008.vcproj", "{D3D09108-96D0-4629-88B8-122C0256058C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{36D61EFD-E004-4275-9551-EA8B1178300E} = {36D61EFD-E004-4275-9551-EA8B1178300E}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uiCore", "uiCore\uiCore.vcproj", "{36D61EFD-E004-4275-9551-EA8B1178300E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,18 +14,18 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{36D61EFD-E004-4275-9551-EA8B1178300E}.Debug|Win32.ActiveCfg = Debug|Win32
-		{36D61EFD-E004-4275-9551-EA8B1178300E}.Debug|Win32.Build.0 = Debug|Win32
-		{36D61EFD-E004-4275-9551-EA8B1178300E}.Profile|Win32.ActiveCfg = Release|Win32
-		{36D61EFD-E004-4275-9551-EA8B1178300E}.Profile|Win32.Build.0 = Release|Win32
-		{36D61EFD-E004-4275-9551-EA8B1178300E}.Release|Win32.ActiveCfg = Release|Win32
-		{36D61EFD-E004-4275-9551-EA8B1178300E}.Release|Win32.Build.0 = Release|Win32
 		{D3D09108-96D0-4629-88B8-122C0256058C}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D3D09108-96D0-4629-88B8-122C0256058C}.Debug|Win32.Build.0 = Debug|Win32
 		{D3D09108-96D0-4629-88B8-122C0256058C}.Profile|Win32.ActiveCfg = Profile|Win32
 		{D3D09108-96D0-4629-88B8-122C0256058C}.Profile|Win32.Build.0 = Profile|Win32
 		{D3D09108-96D0-4629-88B8-122C0256058C}.Release|Win32.ActiveCfg = Release|Win32
 		{D3D09108-96D0-4629-88B8-122C0256058C}.Release|Win32.Build.0 = Release|Win32
+		{36D61EFD-E004-4275-9551-EA8B1178300E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{36D61EFD-E004-4275-9551-EA8B1178300E}.Debug|Win32.Build.0 = Debug|Win32
+		{36D61EFD-E004-4275-9551-EA8B1178300E}.Profile|Win32.ActiveCfg = Release|Win32
+		{36D61EFD-E004-4275-9551-EA8B1178300E}.Profile|Win32.Build.0 = Release|Win32
+		{36D61EFD-E004-4275-9551-EA8B1178300E}.Release|Win32.ActiveCfg = Release|Win32
+		{36D61EFD-E004-4275-9551-EA8B1178300E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
